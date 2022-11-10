@@ -20,6 +20,7 @@ services:
       DB_HOST: "db"
       DB_PORT: "3306"
       RABBITMQ_HOST: "rabbitmq"
+      LOG_TO_FILE: "true"
   auth:
     image: descartesresearch/teastore-auth
     expose:
@@ -28,6 +29,7 @@ services:
       HOST_NAME: "auth"
       REGISTRY_HOST: "registry"
       RABBITMQ_HOST: "rabbitmq"
+      LOG_TO_FILE: "true"
   image:
     image: descartesresearch/teastore-image
     expose:
@@ -36,6 +38,7 @@ services:
       HOST_NAME: "image"
       REGISTRY_HOST: "registry"
       RABBITMQ_HOST: "rabbitmq"
+      LOG_TO_FILE: "true"
   recommender:
     image: descartesresearch/teastore-recommender
     expose:
@@ -44,6 +47,7 @@ services:
       HOST_NAME: "recommender"
       REGISTRY_HOST: "registry"
       RABBITMQ_HOST: "rabbitmq"
+      LOG_TO_FILE: "true"
   webui:
     image: descartesresearch/teastore-webui
     environment:
