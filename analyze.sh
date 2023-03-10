@@ -6,6 +6,14 @@ fi
 
 start=$(pwd)
 
+if [ ! -d $KIEKER_HOME/kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT/ ]
+then
+	echo "Unzipping log-replayer-2.0.0-SNAPSHOT.zip"
+	cd $KIEKER_HOME/ && unzip kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT.zip &> /dev/null
+	cd $start
+fi
+
+
 folders=$(cd kieker-results && for file in $(echo */*); do echo -n "$(pwd)/$file "; done; echo)
 $KIEKER_HOME/kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT/bin/log-replayer -n -i $folders  &> summarize.txt
 resultPath=$(cat summarize.txt | grep actualStoragePath | awk -F'=' '{print $2}' | tr -d "\'")
