@@ -6,11 +6,9 @@ fi
 
 start=$(pwd)
 
-#folders=$(cd kieker-results && for file in $(echo */*); do echo -n "$(pwd)/$file "; done; echo)
-#$KIEKER_HOME/kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT/bin/log-replayer -n -i $folders  &> summarize.txt
-#resultPath=$(cat summarize.txt | grep actualStoragePath | awk -F'=' '{print $2}' | tr -d "\'")
-
-resultPath=/tmp/kieker-20230310-195023-2188471413688-UTC--KIEKER/
+folders=$(cd kieker-results && for file in $(echo */*); do echo -n "$(pwd)/$file "; done; echo)
+$KIEKER_HOME/kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT/bin/log-replayer -n -i $folders  &> summarize.txt
+resultPath=$(cat summarize.txt | grep actualStoragePath | awk -F'=' '{print $2}' | tr -d "\'")
 
 if [ ! -d $KIEKER_HOME/kieker-tools/trace-analysis/build/distributions/trace-analysis-2.0.0-SNAPSHOT/ ]
 then
@@ -28,6 +26,9 @@ CLASSPATH=$APP_HOME/lib/trace-analysis-2.0.0-SNAPSHOT.jar:$APP_HOME/lib/kieker-t
 java -cp $CLASSPATH kieker.tools.trace.analysis.TraceAnalysisToolNewMain \
 	-i $resultPath \
 	-o $(pwd)/graphs \
-	--plot-Deployment-Component-Dependency-Graph responseTimes-ms &> plottingOutput.txt
+	--plot-Deployment-Component-Dependency-Graph responseTimes-ns \
+	--plot-Deployment-Operation-Dependency-Graph responseTimes-ns \
+	--plot-Aggregated-Deployment-Call-Tree \
+	--plot-Aggregated-Assembly-Call-Tree &> plottingOutput.txt
 	
 cd graphs && for file in *.dot; do dot -Tpng $file -o $file.png; done
