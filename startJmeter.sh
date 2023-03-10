@@ -10,7 +10,7 @@ docker ps | awk '{print $1}' | xargs docker stop $1
 docker ps -a | awk '{print $1}' | xargs docker rm -f $1
 
 sudo chown reichelt:reichelt kieker-results -R 
-echo "Parameters: "
-cd kieker-results && for file in $(echo */*); do echo -n "$(pwd)/$file "; done; echo
+#echo "Parameters: "
+#cd kieker-results && for file in $(echo */*); do echo -n "$(pwd)/$file "; done; echo
 
 
