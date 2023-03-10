@@ -9,7 +9,7 @@ start=$(pwd)
 if [ ! -d $KIEKER_HOME/kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT/ ]
 then
 	echo "Unzipping log-replayer-2.0.0-SNAPSHOT.zip"
-	cd $KIEKER_HOME/ && unzip kieker-tools/log-replayer/build/distributions/log-replayer-2.0.0-SNAPSHOT.zip &> /dev/null
+	cd $KIEKER_HOME/kieker-tools/log-replayer/build/distributions/ && unzip log-replayer-2.0.0-SNAPSHOT.zip &> /dev/null
 	cd $start
 fi
 
@@ -21,7 +21,7 @@ resultPath=$(cat summarize.txt | grep actualStoragePath | awk -F'=' '{print $2}'
 if [ ! -d $KIEKER_HOME/kieker-tools/trace-analysis/build/distributions/trace-analysis-2.0.0-SNAPSHOT/ ]
 then
 	echo "Unzipping trace-analysis-2.0.0-SNAPSHOT.zip"
-	cd $KIEKER_HOME/ && unzip kieker-tools/trace-analysis/build/distributions/trace-analysis-2.0.0-SNAPSHOT.zip &> /dev/null
+	cd $KIEKER_HOME/kieker-tools/trace-analysis/build/distributions/ && unzip trace-analysis-2.0.0-SNAPSHOT.zip &> /dev/null
 	cd $start
 fi
 
