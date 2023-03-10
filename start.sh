@@ -15,7 +15,7 @@ MY_FOLDER=$(pwd)/kieker-results/
 set -e
 if [ -d $MY_FOLDER ]
 then
-	rm -r $MY_FOLDER
+	sudo rm -rf $MY_FOLDER
 fi
 
 mkdir -p $MY_FOLDER
