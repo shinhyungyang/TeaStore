@@ -4,16 +4,23 @@ then
 	exit 1
 fi
 
+echo "Building current version..."
+
+mvn clean package -DskipTests &> build.txt
+cd tools && ./build_docker.sh >> ../build.txt && cd ..
+
 MY_IP=$1
 MY_FOLDER=$(pwd)/kieker-results/
 
 set -e
 if [ -d $MY_FOLDER ]
 then
-	rm $MY_FOLDER
+	rm -r $MY_FOLDER
 fi
 
 mkdir -p $MY_FOLDER
+
+echo "Creating docker containers..."
 
 docker run -p 3306:3306 -d teastore-db
 docker run -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=10000" -p 10000:8080 -d teastore-registry
