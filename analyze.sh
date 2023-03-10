@@ -26,8 +26,8 @@ CLASSPATH=$APP_HOME/lib/trace-analysis-2.0.0-SNAPSHOT.jar:$APP_HOME/lib/kieker-t
 java -cp $CLASSPATH kieker.tools.trace.analysis.TraceAnalysisToolNewMain \
 	-i $resultPath \
 	-o $(pwd)/graphs \
-	--plot-Deployment-Component-Dependency-Graph responseTimes-ns \
-	--plot-Deployment-Operation-Dependency-Graph responseTimes-ns \
+	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
+	--plot-Deployment-Operation-Dependency-Graph responseTimes-ms \
 	--plot-Aggregated-Deployment-Call-Tree \
 	--plot-Aggregated-Assembly-Call-Tree &> plottingOutput.txt
 	
