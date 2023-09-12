@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ "$KIEKER_HOME" == "" ] || [ ! -d $KIEKER_HOME ] 
 then
 	echo "\$KIEKER_HOME needs to be a directory!"

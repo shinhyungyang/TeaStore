@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ "$JMETER_HOME" == "" ] || [ ! -d $JMETER_HOME ] 
 then
 	echo "\$JMETER_HOME needs to be a directory!"
