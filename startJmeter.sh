@@ -8,8 +8,8 @@ fi
 
 java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname localhost -Jport 8080 -n 
 
-docker ps | awk '{print $1}' | xargs docker stop $1
-docker ps -a | awk '{print $1}' | xargs docker rm -f $1
+docker ps | grep teastore | awk '{print $1}' | xargs docker stop $1
+docker ps -a | grep teastore | awk '{print $1}' | xargs docker rm -f $1
 
 USER=$(whoami)
 sudo chown $USER:$USER kieker-results -R 
