@@ -23,9 +23,9 @@ BASE_DIR=`pwd`
 MY_FOLDER="$BASE_DIR/kieker-results/"
 
 set -e
-if [ -d $MY_FOLDER ]
+if [ -d $MY_FOLDER ] && [ ! -z "$( ls -A $MY_FOLDER )" ]
 then
-	sudo rm -rf $MY_FOLDER
+	sudo rm -rf $MY_FOLDER/*
 fi
 
 mkdir -p $MY_FOLDER
