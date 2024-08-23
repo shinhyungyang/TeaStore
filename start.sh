@@ -49,7 +49,7 @@ MY_FOLDER="$BASE_DIR/kieker-results/"
 set -e
 if [ -d $MY_FOLDER ] && [ ! -z "$( ls -A $MY_FOLDER )" ]
 then
-	docker run --rm -v $MYFOLDER:/kieker-results alpine sh -c "rm -rf /kieker-results/*"
+	docker run --rm -v $MY_FOLDER:/kieker-results alpine sh -c "rm -rf /kieker-results/*"
 #	sudo rm -rf $MY_FOLDER/*
 fi
 
