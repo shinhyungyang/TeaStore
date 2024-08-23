@@ -4,6 +4,8 @@ function runOneExperiment {
 	PARAMETER=$1
 	RESULTFILE=$2
 	NUMUSER=$3
+	
+	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print $1}" | xargs docker rm -f $1'
 
 	ssh $TEASTORE_RUNNER_IP "cd TeaStore; ls; ./start.sh $HOST_SELF_IP"
 
