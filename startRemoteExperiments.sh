@@ -63,8 +63,8 @@ ssh -q $1 "exit"
 ssh $TEASTORE_RUNNER_IP "if [ ! -d TeaStore ]; then git clone https://github.com/DaGeRe/TeaStore.git; fi"
 ssh $TEASTORE_RUNNER_IP "cd TeaStore; git checkout kieker-debug; git pull"
 
-for users in 1 2 4 8 16
+for NUMUSER in 1 2 4 8 16
 do
-	runOneExperiment " " aspectj_instrumentation_$users.csv
-	runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$users.csv
+	runOneExperiment " " aspectj_instrumentation_$users.csv $NUMUSER
+	runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$users.csv $NUMUSER
 done
