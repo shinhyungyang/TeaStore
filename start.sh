@@ -1,5 +1,23 @@
 #!/bin/bash
 
+function waitForContainerStartup {
+	containerName=$1
+	textToWaitFor=$2
+	
+	echo "Waiting for $containerName to be ready"
+	attempt=0
+	while [ $attempt -le 120 ]; do
+	    attempt=$(( $attempt + 1 ))
+	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
+	    result=$(docker logs $containerName 2>&1)
+	    if grep -q $textToWaitFor <<< $result ; then
+	      echo "$containerName is up!"
+	      break
+	    fi
+	    sleep 2
+	done
+}
+
 if [ $# -lt 1 ]
 then
 	echo "Please provide IP as parameter!"
@@ -53,15 +71,7 @@ docker run --hostname=teastore-image-1 \
 docker run --hostname=teastore-webui-1 \
 	-v $MY_FOLDER/teastore-webui:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=8080" -p 8080:8080 -d teastore-webui
 
-attempt=0
-while [ $attempt -le 59 ]; do
-    attempt=$(( $attempt + 1 ))
-    echo "Waiting for Tomcat to be up (attempt: $attempt)..."
-    result=$(docker logs recommender 2>&1)
-    if grep -q 'org.apache.catalina.startup.Catalina.start Server startup in ' <<< $result ; then
-      echo "Tomcat is up!"
-      break
-    fi
-    sleep 2
-done
+waitForContainerStartup recommender 'org.apache.catalina.startup.Catalina.start Server startup in '
 
+database_id=$(docker ps | grep "teastore-db" | awk '{print $1}')
+waitForContainerStartup $database_id 'port: 3306'
