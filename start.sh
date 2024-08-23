@@ -10,7 +10,7 @@ function waitForContainerStartup {
 	    attempt=$(( $attempt + 1 ))
 	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
 	    result=$(docker logs $containerName 2>&1)
-	    if grep -q $textToWaitFor <<< $result ; then
+	    if grep -q "$textToWaitFor" <<< $result ; then
 	      echo "$containerName is up!"
 	      break
 	    fi
