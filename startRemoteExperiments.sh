@@ -34,7 +34,15 @@ echo
 echo
 echo "Building is finished; Starting load test"
 
-java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname $TEASTORE_RUNNER_IP -Jport 8080 -n 
+RESULTFILE=no_instrumentation.csv
+if [ -f $RESULTFILE ]
+then
+       rm $RESULTFILE
+fi
+
+java -jar $JMETER_HOME/bin/ApacheJMeter.jar \
+       -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname localhost -Jport 8080 -n \
+       -l $RESULTFILE
 
 echo
 echo
