@@ -18,7 +18,7 @@ function runOneExperiment {
 	       rm $RESULTFILE
 	fi
 
-	echo "Replacing user count by $NUMUSER
+	echo "Replacing user count by $NUMUSER"
 	
 	sed -i '/>num_user/{n;s/.*/\            <stringProp name="Argument.value"\>'$NUMUSER'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
 
