@@ -17,6 +17,8 @@ function runOneExperiment {
 	then
 	       rm $RESULTFILE
 	fi
+	
+	sleep 10s
 
 	echo "Replacing user count by $NUMUSER"
 	
