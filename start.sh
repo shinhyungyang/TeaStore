@@ -6,7 +6,7 @@ function waitForContainerStartup {
 	
 	echo "Waiting for $containerName to be ready"
 	attempt=0
-	while [ $attempt -le 120 ]; do
+	while [ $attempt -le 300 ]; do
 	    attempt=$(( $attempt + 1 ))
 	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
 	    result=$(docker logs $containerName 2>&1)
