@@ -6,6 +6,12 @@ then
 	exit 1
 fi
 
+if [[ "$2" == "NO_INSTRUMENTATION" ]]
+then
+       sed -i 's/-javaagent:\/kieker\/agent\/agent\.jar//g' utilities/tools.descartes.teastore.dockerbase/start.sh
+fi
+
+
 echo "Building current version..."
 
 mvn clean package -DskipTests &> build.txt
