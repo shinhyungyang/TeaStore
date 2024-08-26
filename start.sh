@@ -24,7 +24,7 @@ then
 	exit 1
 fi
 
-git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+git checkout -- utilities/tools.descartes.teastore.dockerbase/*
 for file in $(find . -name "pom.xml"); do git checkout -- $file; done
 
 if [[ "$2" == "NO_INSTRUMENTATION" ]]
