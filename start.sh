@@ -25,6 +25,7 @@ then
 fi
 
 git checkout -- utilities/tools.descartes.teastore.dockerbase/*
+git checkout -- utilities/tools.descartes.teastore.registryclient/src/main/java/tools/descartes/teastore/registryclient/rest/*
 for file in $(find . -name "pom.xml"); do git checkout -- $file; done
 
 if [[ "$2" == "NO_INSTRUMENTATION" ]]
