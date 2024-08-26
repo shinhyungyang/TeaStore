@@ -24,9 +24,12 @@ then
 	exit 1
 fi
 
+git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+for file in $(find . -name "pom.xml"); do git checkout -- $file; done
+
 if [[ "$2" == "NO_INSTRUMENTATION" ]]
 then
-	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+	
 	sed -i 's/-javaagent:\/kieker\/agent\/agent\.jar//g' utilities/tools.descartes.teastore.dockerbase/start.sh
 	for pomFile in interfaces/tools.descartes.teastore.entities/pom.xml #TODO Should be removed for all files, but currently only works here...
 	do
@@ -37,9 +40,37 @@ then
 			next;
 		    }
 		    print;
-		}' $pomFile &> temp.csv
-		mv temp.csv $pomFile
+		}' $pomFile &> temp.xml
+		mv temp.xml $pomFile
 	done
+	
+	sed -i '/<module>\.\/utilities\/tools\.descartes\.teastore\.kieker\.probes<\/module>/d; /<module>\.\/utilities\/tools\.descartes\.teastore\.kieker\.rabbitmq<\/module>/d'  pom.xml
+	
+	for pomFile in services/tools.descartes.teastore.auth/pom.xml services/tools.descartes.teastore.persistence/pom.xml  services/tools.descartes.teastore.recommender/pom.xml  services/tools.descartes.teastore.registry/pom.xml  services/tools.descartes.teastore.webui/pom.xml
+	do
+		awk '{
+                    if (line_count > 0) { line_count--; next; }
+                    if ($0 ~ /<artifactId>kieker.probes<\/artifactId>/) {
+                        line_count = 4; prev="";
+                        next;
+                    } else {print prev;}
+                    prev=$0;
+                } END {print prev}' $pomFile &> temp.xml
+                mv temp.xml $pomFile
+       done
+       
+       for pomFile in services/tools.descartes.teastore.image/pom.xml # no space here
+	do
+		awk '{
+                    if (line_count > 0) { line_count--; next; }
+                    if ($0 ~ /<artifactId>kieker.probes<\/artifactId>/) {
+                        line_count = 3; prev="";
+                        next;
+                    } else {print prev;}
+                    prev=$0;
+                } END {print prev}' $pomFile &> temp.xml
+                mv temp.xml $pomFile
+       done
 fi
 
 if [[ "$2" == "DEACTIVATED" ]]
