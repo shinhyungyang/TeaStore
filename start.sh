@@ -72,7 +72,7 @@ then
                 mv temp.xml $pomFile
        done
        
-       sed -i '/^COPY kieker-2.0.0-SNAPSHOT-aspectj\.jar/d' Dockerfile
+       sed -i '/^COPY kieker-2.0.0-SNAPSHOT-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        rm utilities/tools.descartes.teastore.dockerbase/kieker-*
        cp no-instrumentation-sources/* utilities/tools.descartes.teastore.registryclient/src/main/java/tools/descartes/teastore/registryclient/rest/
 fi
