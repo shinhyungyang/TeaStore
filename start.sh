@@ -28,6 +28,18 @@ if [[ "$2" == "NO_INSTRUMENTATION" ]]
 then
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
 	sed -i 's/-javaagent:\/kieker\/agent\/agent\.jar//g' utilities/tools.descartes.teastore.dockerbase/start.sh
+	for pomFile in interfaces/tools.descartes.teastore.entities/pom.xml #TODO Should be removed for all files, but currently only works here...
+	do
+		awk '{
+		    if (line_count > 0) { line_count--; next; }
+		    if ($0 ~ /<groupId>net.kieker-monitoring<\/groupId>/) {
+			line_count = 4;
+			next;
+		    }
+		    print;
+		}' $pomFile &> temp.csv
+		mv temp.csv $pomFile
+	done
 fi
 
 if [[ "$2" == "DEACTIVATED" ]]
