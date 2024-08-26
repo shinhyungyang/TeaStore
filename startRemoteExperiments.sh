@@ -68,5 +68,5 @@ ssh $TEASTORE_RUNNER_IP "cd TeaStore; git checkout kieker-debug; git pull"
 for NUMUSER in 1 2 4 8 16
 do
 	runOneExperiment " " aspectj_instrumentation_$NUMUSER.csv $NUMUSER
-	runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$users.csv $NUMUSER
+	runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER.csv $NUMUSER
 done
