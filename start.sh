@@ -31,7 +31,7 @@ if [[ "$2" == "NO_INSTRUMENTATION" ]]
 then
 	
 	sed -i 's/-javaagent:\/kieker\/agent\/agent\.jar//g' utilities/tools.descartes.teastore.dockerbase/start.sh
-	for pomFile in interfaces/tools.descartes.teastore.entities/pom.xml #TODO Should be removed for all files, but currently only works here...
+	for pomFile in interfaces/tools.descartes.teastore.entities/pom.xml  utilities/tools.descartes.teastore.registryclient/pom.xml #TODO Should be removed for all files, but currently only works here...
 	do
 		awk '{
 		    if (line_count > 0) { line_count--; next; }
@@ -71,6 +71,10 @@ then
                 } END {print prev}' $pomFile &> temp.xml
                 mv temp.xml $pomFile
        done
+       
+       sed -i '/^COPY kieker-2.0.0-SNAPSHOT-aspectj\.jar/d' Dockerfile
+       rm utilities/tools.descartes.teastore.dockerbase/kieker-*
+       cp no-instrumentation-sources/* utilities/tools.descartes.teastore.registryclient/src/main/java/tools/descartes/teastore/registryclient/rest/
 fi
 
 if [[ "$2" == "DEACTIVATED" ]]
