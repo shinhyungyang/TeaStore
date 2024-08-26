@@ -26,7 +26,26 @@ fi
 
 if [[ "$2" == "NO_INSTRUMENTATION" ]]
 then
-       sed -i 's/-javaagent:\/kieker\/agent\/agent\.jar//g' utilities/tools.descartes.teastore.dockerbase/start.sh
+	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+	sed -i 's/-javaagent:\/kieker\/agent\/agent\.jar//g' utilities/tools.descartes.teastore.dockerbase/start.sh
+fi
+
+if [[ "$2" == "DEACTIVATED" ]]
+then
+	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+	sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.enabled=false"/' utilities/tools.descartes.teastore.dockerbase/start.sh
+fi
+
+if [[ "$2" == "NOLOGGING" ]]
+then
+	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+	sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter -Dkieker.monitoring.core.controller.WriterController.RecordQueueFQN=kieker.monitoring.writer.dump.DumpQueue"/' utilities/tools.descartes.teastore.dockerbase/start.sh
+fi # 
+
+if [[ "$2" == "TCP" ]]
+then
+	echo "Not implemented yet"
+	exit 1
 fi
 
 
