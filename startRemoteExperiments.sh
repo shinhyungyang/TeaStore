@@ -33,6 +33,7 @@ function runOneExperiment {
 	echo "Load test is finished; Removing containers"
 
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
+	ssh $TEASTORE_RUNNER_IP 'if [ -f utilities/receiver.pid ]; then kill -TERM \$(cat utilities/receiver.pid); rm utilities/receiver.pid; fi'
 	
 	sleep 5s
 }
@@ -71,5 +72,6 @@ do
 	runOneExperiment "DEACTIVATED" deactivated_$NUMUSER.csv $NUMUSER
 	runOneExperiment "NOLOGGING" nologging_$NUMUSER.csv $NUMUSER
 	runOneExperiment " " aspectj_instrumentation_$NUMUSER.csv $NUMUSER
+	runOneExperiment "TCP" tcp_$NUMUSER.csv $NUMUSER
 	
 done
