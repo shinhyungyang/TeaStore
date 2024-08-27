@@ -95,9 +95,8 @@ fi #
 
 if [[ "$2" == "TCP" ]]
 then
-	java -jar utilities/receiver.jar 10001 > "kieker-receiver.log" &
+	nohup java -jar utilities/receiver.jar 10001 > "kieker-receiver.log" &
 	RECEIVER_PID=$!
-	disown
 	echo "$RECEIVER_PID" > utilities/receiver.pid
 	
 	sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
