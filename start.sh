@@ -28,6 +28,8 @@ git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
 git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-aspectj.jar
 git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
 
+git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+
 git checkout -- utilities/tools.descartes.teastore.registryclient/src/main/java/tools/descartes/teastore/registryclient/rest/*
 for file in $(find . -name "pom.xml"); do git checkout -- $file; done
 
