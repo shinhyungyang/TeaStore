@@ -33,7 +33,7 @@ function runOneExperiment {
 	echo "Load test is finished; Removing containers"
 
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
-	ssh $TEASTORE_RUNNER_IP 'if [ -f utilities/receiver.pid ]; then kill -TERM \$(cat utilities/receiver.pid); rm utilities/receiver.pid; fi'
+	ssh $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)'
 	
 	sleep 5s
 }
