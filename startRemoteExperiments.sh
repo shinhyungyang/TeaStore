@@ -37,7 +37,8 @@ function runOneExperiment {
 	if [[ "$PARAMETER" == "TCP" ]]
 	then
 		echo "Stopping receiver"
-		ssh $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)'
+		# Don't fail on the next one, it usually works and still gives return code 255
+		(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)') || true
 	fi
 	
 	sleep 5s
