@@ -18,6 +18,18 @@ function waitForContainerStartup {
 	done
 }
 
+function waitForFullstartup() {
+    while true; do
+        # Check the status using curl and grep
+        if ! curl -s http://localhost:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"; then
+            echo "Service is online. Exiting..."
+            break
+        fi
+        echo "Services are still partially offline. Checking again in 2 seconds..."
+        sleep 2
+    done
+}
+
 if [ $# -lt 1 ]
 then
 	echo "Please provide IP as parameter!"
@@ -152,3 +164,5 @@ waitForContainerStartup recommender 'org.apache.catalina.startup.Catalina.start 
 
 database_id=$(docker ps | grep "teastore-db" | awk '{print $1}')
 waitForContainerStartup $database_id 'port: 3306'
+
+waitForFullstartup
