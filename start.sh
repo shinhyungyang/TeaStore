@@ -97,7 +97,7 @@ fi #
 
 if [[ "$2" == "TCP" ]]
 then
-	nohup java -jar utilities/receiver.jar 10001 > "kieker-receiver.log" &
+	java -jar utilities/receiver.jar 10001 > "kieker-receiver.log" &
 	
 	sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 	sed -i "s/#kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
