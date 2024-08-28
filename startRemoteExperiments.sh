@@ -33,7 +33,12 @@ function runOneExperiment {
 	echo "Load test is finished; Removing containers"
 
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
-	ssh $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)'
+	
+	if [[ "$PARAMETER" == "TCP" ]]
+	then
+		echo "Stopping receiver"
+		ssh $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)'
+	fi
 	
 	sleep 5s
 }
