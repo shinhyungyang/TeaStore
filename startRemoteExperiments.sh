@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function getSum {
+  awk '{sum += $1; square += $1^2} END {print sqrt(square / NR - (sum/NR)^2)" "sum/NR" "NR}'
+}
+
 function runOneExperiment {
 	PARAMETER=$1
 	RESULTFILE=$2
@@ -72,12 +76,23 @@ ssh -q $1 "exit"
 ssh $TEASTORE_RUNNER_IP "if [ ! -d TeaStore ]; then git clone https://github.com/DaGeRe/TeaStore.git; fi"
 ssh $TEASTORE_RUNNER_IP "cd TeaStore; git checkout kieker-debug; git pull"
 
-for NUMUSER in 1 2 4 8 16
+durations=""
+loops=10
+for (( iteration=1; iteration<=$loops; iteration++ ))
 do
-	runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER.csv $NUMUSER
-	runOneExperiment "DEACTIVATED" deactivated_$NUMUSER.csv $NUMUSER
-	runOneExperiment "NOLOGGING" nologging_$NUMUSER.csv $NUMUSER
-	runOneExperiment " " aspectj_instrumentation_$NUMUSER.csv $NUMUSER
-	runOneExperiment "TCP" tcp_$NUMUSER.csv $NUMUSER
-	
+	start=$(date +%s%N)
+	for NUMUSER in 1 2 4 8 16
+	do
+		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment " " aspectj_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER	
+	done
+	end=$(date +%s%N)
+	duration=$(echo "($end-$start)/1000000" | bc)
+	durations="$durations $duration"
+	average=$(echo $durations | getSum | awk '{print $2/1000}')
+	remaining=$(echo "scale=2; $average*($loops-$iteration)/60" | bc -l)
+	echo " Remaining: $remaining minutes"
 done
