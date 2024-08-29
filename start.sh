@@ -14,7 +14,7 @@ function waitForContainerStartup {
 	      echo "$containerName is up!"
 	      break
 	    fi
-	    sleep 2
+	    sleep 5
 	done
 }
 
@@ -25,8 +25,8 @@ function waitForFullstartup() {
             echo "Service is online. Exiting..."
             break
         fi
-        echo "Services are still partially offline. Checking again in 2 seconds..."
-        sleep 2
+        echo "Services are still partially offline. Checking again in 5 seconds..."
+        sleep 5
     done
 }
 
