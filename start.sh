@@ -36,6 +36,12 @@ then
 	exit 1
 fi
 
+MY_IP=$1
+BASE_DIR=`pwd`
+MY_FOLDER="$BASE_DIR/kieker-results/"
+
+set -e
+
 source functions.sh
 
 resetInstrumentationFiles
@@ -74,17 +80,14 @@ fi
 
 if [[ "$2" == "OPENTELEMETRY_DEACTIVATED" ]]
 then
-	echo "Not implemented yet."
-	exit 1
+	removeAllInstrumentation
+	instrumentForOpenTelemetry $MY_IP "DEACTIVATED"
 fi
 
 if [[ "$2" == "OPENTELEMETRY_SPANS" ]]
 then
-	curl -L -O https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
-	mv opentelemetry-javaagent.jar utilities/tools.descartes.teastore.dockerbase/opentelemetry-javaagent.jar
-
-	echo "Not implemented yet."
-	exit 1
+	removeAllInstrumentation
+	instrumentForOpenTelemetry $MY_IP
 fi
 
 
@@ -100,11 +103,6 @@ fi
 
 cd tools && ./build_docker.sh >> ../build.txt && cd ..
 
-MY_IP=$1
-BASE_DIR=`pwd`
-MY_FOLDER="$BASE_DIR/kieker-results/"
-
-set -e
 if [ -d $MY_FOLDER ] && [ ! -z "$( ls -A $MY_FOLDER )" ]
 then
 	docker run --rm -v $MY_FOLDER:/kieker-results alpine sh -c "rm -rf /kieker-results/*"

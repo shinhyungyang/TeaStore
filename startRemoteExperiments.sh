@@ -87,7 +87,9 @@ do
 		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment " " aspectj_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER	
+		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "OPENTELEMETRY" otel_$NUMUSER"_"$iteration.csv $NUMUSER
 	done
 	end=$(date +%s%N)
 	duration=$(echo "($end-$start)/1000000" | bc)
