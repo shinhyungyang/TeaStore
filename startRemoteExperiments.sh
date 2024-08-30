@@ -86,8 +86,9 @@ do
 		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment " " aspectj_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment " " kieker_aspectj_full_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "KIEKER_BYTEBUDDY" kieker_bytebuddy_full_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "OPENTELEMETRY" otel_$NUMUSER"_"$iteration.csv $NUMUSER
 	done
