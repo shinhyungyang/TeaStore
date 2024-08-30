@@ -72,10 +72,9 @@ then
 	sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 fi
 
-if [[ "$2" == "BYTEBUDDY" ]]
+if [[ "$2" == "KIEKER_BYTEBUDDY" ]]
 then
-	echo "Not implemented yet."
-	exit 1
+	instrumentForKiekerBytebuddy
 fi
 
 if [[ "$2" == "OPENTELEMETRY_DEACTIVATED" ]]

@@ -87,6 +87,10 @@ function instrumentForOpenTelemetry {
 			otel/opentelemetry-collector-contrib:0.108.0
 	else
 		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.metrics.exporter=none|g' utilities/tools.descartes.teastore.dockerbase/start.sh
-	fi
-		
+	fi	
+}
+
+function instrumentForKiekerBytebuddy {
+	sed -i 's/kieker-2.0.0-SNAPSHOT-aspectj/kieker-2.0.0-SNAPSHOT-bytebuddy/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 }
