@@ -19,15 +19,17 @@ function waitForContainerStartup {
 }
 
 function waitForFullstartup() {
-    while true; do
-        # Check the status using curl and grep
-        if ! curl -s http://localhost:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"; then
-            echo "Service is online. Exiting..."
-            break
-        fi
-        echo "Services are still partially offline. Checking again in 5 seconds..."
-        sleep 5
-    done
+	attempt=0
+	while [ $attempt -le 300 ]; do
+		# Check the status using curl and grep
+		if ! curl -s http://localhost:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+		then
+			echo "Service is online. Exiting..."
+		break
+		fi
+		echo "Services are still partially offline. Checking again in 5 seconds..."
+		sleep 5
+	done
 }
 
 if [ $# -lt 1 ]
