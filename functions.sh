@@ -93,8 +93,8 @@ function instrumentForOpenTelemetry {
 function instrumentForKiekerBytebuddy {
 	if [ ! -f utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar ]
 	then
-		curl -L -O https://oss.sonatype.org/content/repositories/snapshots/net/kieker-monitoring/kieker/2.0.0-SNAPSHOT/kieker-2.0.0-20240831.114131-825-bytebuddy.jar
-		mv kieker-2.0.0-20240831.114131-825-bytebuddy.jar utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar
+		curl -L -O https://oss.sonatype.org/content/repositories/snapshots/net/kieker-monitoring/kieker/2.0.0-SNAPSHOT/kieker-2.0.0-20240903.203853-837-bytebuddy.jar
+		mv kieker-2.0.0-20240903.203853-837-bytebuddy.jar utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar
 	fi
 
 	sed -i 's/kieker-2.0.0-SNAPSHOT-aspectj/kieker-2.0.0-SNAPSHOT-bytebuddy/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
