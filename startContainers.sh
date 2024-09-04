@@ -38,6 +38,21 @@ then
 	exit 1
 fi
 
+if [ $# -gt 3 ]
+then
+	container_id=$3
+	agent_ip=$4
+	if [[ $agent_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
+	then
+		echo "IP $agent_ip will be used for the current host"
+	else
+		echo "IP $agent_ip not valid; exiting"
+		exit 1
+	fi
+else
+	container_id="1"
+fi
+
 MY_IP=$1
 BASE_DIR=`pwd`
 MY_FOLDER="$BASE_DIR/kieker-results/"
@@ -66,6 +81,9 @@ then
 			sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 			sed -i "s/#kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 			sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+			;;
+		"KIEKER_ASPECTJ_TEXT")
+			# Do nothing, since this is the default configuration
 			;;
 		"KIEKER_ASPECTJ_BINARY")
 			useBinaryWriterKieker
@@ -111,22 +129,41 @@ mkdir -p $MY_FOLDER
 
 echo "Creating docker containers..."
 
-docker run --hostname=teastore-db-1 \
-	-p 3306:3306 -d teastore-db
-docker run --hostname=teastore-registry-1 \
-	-e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=10000" -p 10000:8080 -d teastore-registry 
-docker run --hostname=teastore-persistence-1 \
+if [ $container_id == "1" ]
+then
+	docker run --hostname=teastore-db-$container_id \
+		-p 3306:3306 -d teastore-db
+	docker run --hostname=teastore-registry-$container_id \
+		-e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=10000" -p 10000:8080 -d teastore-registry 
+	docker run --hostname=teastore-persistence-$container_id \
 	-v $MY_FOLDER/teastore-persistence:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=1111" -e "DB_HOST=$MY_IP" -e "DB_PORT=3306" -p 1111:8080 -d teastore-persistence
-docker run --hostname=teastore-auth-1 \
+docker run --hostname=teastore-auth-$container_id \
 	-v $MY_FOLDER/teastore-auth:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=2222" -p 2222:8080 -d teastore-auth
-docker run --hostname=teastore-recommender-1 \
-	--name recommender -v $MY_FOLDER/teastore-recommender:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=3333" -p 3333:8080 -d teastore-recommender
-docker run --hostname=teastore-image-1 \
+docker run --hostname=teastore-recommender-$container_id \
+	-v $MY_FOLDER/teastore-recommender:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=3333" -p 3333:8080 -d teastore-recommender
+docker run --hostname=teastore-image-$container_id \
 	-v $MY_FOLDER/teastore-image:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=4444" -p 4444:8080 -d teastore-image
-docker run --hostname=teastore-webui-1 \
+docker run --hostname=teastore-webui-$container_id \
 	-v $MY_FOLDER/teastore-webui:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=8080" -p 8080:8080 -d teastore-webui
+else
+	AGENT_IP=$3
+	docker run --hostname=teastore-persistence-$container_id \
+		-v $MY_FOLDER/teastore-persistence:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=1111" -e "DB_HOST=$MY_IP" -e "DB_PORT=3306" -p 1111:8080 -d teastore-persistence
+	docker run --hostname=teastore-auth-$container_id \
+		-v $MY_FOLDER/teastore-auth:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$agent_ip" -e "SERVICE_PORT=2222" -p 2222:8080 -d teastore-auth
+	docker run --hostname=teastore-recommender-$container_id \
+		-v $MY_FOLDER/teastore-recommender:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$agent_ip" -e "SERVICE_PORT=3333" -p 3333:8080 -d teastore-recommender
+	docker run --hostname=teastore-image-$container_id \
+		-v $MY_FOLDER/teastore-image:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$agent_ip" -e "SERVICE_PORT=4444" -p 4444:8080 -d teastore-image
+	docker run --hostname=teastore-webui-$container_id \
+		-v $MY_FOLDER/teastore-webui:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$agent_ip" -e "SERVICE_PORT=8080" -p 8080:8080 -d teastore-webui
+fi
 
-waitForContainerStartup recommender 'org.apache.catalina.startup.Catalina.start Server startup in '
+
+
+
+recommender_id=$(docker ps | grep "recommender" | awk '{print $1}')
+waitForContainerStartup recommender_id 'org.apache.catalina.startup.Catalina.start Server startup in '
 
 database_id=$(docker ps | grep "teastore-db" | awk '{print $1}')
 waitForContainerStartup $database_id 'port: 3306'
