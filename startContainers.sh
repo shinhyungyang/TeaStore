@@ -72,6 +72,7 @@ then
 			;;
 		"KIEKER_BYTEBUDDY_TEXT")
 			instrumentForKiekerBytebuddy
+			;;
 		"KIEKER_BYTEBUDDY_BINARY")
 			instrumentForKiekerBytebuddy
 			useBinaryWriterKieker
