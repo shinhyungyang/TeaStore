@@ -61,7 +61,7 @@ set -e
 
 source functions.sh
 
-#resetInstrumentationFiles
+resetInstrumentationFiles
 
 if [ "$2" ]
 then
