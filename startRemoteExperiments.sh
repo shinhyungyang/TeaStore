@@ -39,8 +39,18 @@ function runOneExperiment {
 	NUMUSER=$3
 	
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
-
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER"
+	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
+	
+	index=2
+	for AGENT_IP in "${@:4}"
+	do
+		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
+		ssh -t $AGENT_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER $index $AGENT_IP"
+		ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
+		((index++))
+	done
+	
 
 	runLoadTest $RESULTFILE $NUMUSER
 
@@ -105,16 +115,16 @@ do
 	start=$(date +%s%N)
 	for NUMUSER in 1 2 4 8 16
 	do
-		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "KIEKER_ASPECTJ_TEXT" kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "KIEKER_ASPECTJ_BINARY" kieker_aspectj_binary_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "KIEKER_BYTEBUDDY" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "KIEKER_BYTEBUDDY_BINARY" kieker_bytebuddy_binary_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "OPENTELEMETRY" otel_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_ASPECTJ_TEXT" kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_ASPECTJ_BINARY" kieker_aspectj_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_BYTEBUDDY" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_BYTEBUDDY_BINARY" kieker_bytebuddy_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "OPENTELEMETRY" otel_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 	done
 	end=$(date +%s%N)
 	duration=$(echo "($end-$start)/1000000" | bc)
