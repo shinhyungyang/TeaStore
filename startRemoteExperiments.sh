@@ -90,12 +90,6 @@ then
 fi
 
 TEASTORE_RUNNER_IP=$1
-if [ $# -gt 1 ]
-then
-	HOST_SELF_IP=$2
-else
-	HOST_SELF_IP=$TEASTORE_RUNNER_IP
-fi
 
 # Just test connection
 setupServer $TEASTORE_RUNNER_IP
