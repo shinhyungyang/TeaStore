@@ -11,7 +11,7 @@ function runOneExperiment {
 	
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 
-	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./start.sh $HOST_SELF_IP $PARAMETER"
+	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startRemoteExperiments.sh $HOST_SELF_IP $PARAMETER"
 
 	echo
 	echo
@@ -86,9 +86,11 @@ do
 		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment " " kieker_aspectj_full_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment " " kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "KIEKER_ASPECTJ_BINARY" kieker_aspectj_binary_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment "KIEKER_BYTEBUDDY" kieker_bytebuddy_full_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "KIEKER_BYTEBUDDY" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "KIEKER_BYTEBUDDY_BINARY" kieker_bytebuddy_binary_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "OPENTELEMETRY" otel_$NUMUSER"_"$iteration.csv $NUMUSER
 	done

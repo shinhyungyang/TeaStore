@@ -46,51 +46,49 @@ set -e
 
 source functions.sh
 
-resetInstrumentationFiles
+#resetInstrumentationFiles
 
-if [[ "$2" == "NO_INSTRUMENTATION" ]]
+if [ "$2" ]
 then
-	removeAllInstrumentation
-fi
-
-if [[ "$2" == "DEACTIVATED" ]]
-then
-	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
-	sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.enabled=false"/' utilities/tools.descartes.teastore.dockerbase/start.sh
-fi
-
-if [[ "$2" == "NOLOGGING" ]]
-then
-	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
-	sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter -Dkieker.monitoring.core.controller.WriterController.RecordQueueFQN=kieker.monitoring.writer.dump.DumpQueue"/' utilities/tools.descartes.teastore.dockerbase/start.sh
-fi # 
-
-if [[ "$2" == "TCP" ]]
-then
-	java -jar utilities/receiver.jar 10001 > "kieker-receiver.log" &
+	ec
+	case "$2" in
+		"NO_INSTRUMENTATION") removeAllInstrumentation ;;
+		"DEACTIVATED") 
+			git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+			sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.enabled=false"/' utilities/tools.descartes.teastore.dockerbase/start.sh
+			;;
+		"NOLOGGING")
+			git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
+			sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter -Dkieker.monitoring.core.controller.WriterController.RecordQueueFQN=kieker.monitoring.writer.dump.DumpQueue"/' utilities/tools.descartes.teastore.dockerbase/start.sh
+			;;
+		"TCP")
+			java -jar utilities/receiver.jar 10001 > "kieker-receiver.log" &
 	
-	sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
-	sed -i "s/#kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
-	sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+			sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+			sed -i "s/#kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+			sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+			;;
+		"KIEKER_ASPECTJ_BINARY")
+			echo "Not supported yet";
+			exit 1;
+			;;
+		"KIEKER_BYTEBUDDY_TEXT")
+			instrumentForKiekerBytebuddy
+		"KIEKER_BYTEBUDDY_BINARY")
+			echo "Not supported yet";
+			exit 1;
+			;;
+		"OPENTELEMETRY_DEACTIVATED")
+			removeAllInstrumentation
+			instrumentForOpenTelemetry $MY_IP "DEACTIVATED"
+			;;
+		"OPENTELEMETRY_SPANS")
+			removeAllInstrumentation
+			instrumentForOpenTelemetry $MY_IP
+			;;
+		*) echo "Configuration $2 not found; Exiting"; exit 1;;
+esac
 fi
-
-if [[ "$2" == "KIEKER_BYTEBUDDY" ]]
-then
-	instrumentForKiekerBytebuddy
-fi
-
-if [[ "$2" == "OPENTELEMETRY_DEACTIVATED" ]]
-then
-	removeAllInstrumentation
-	instrumentForOpenTelemetry $MY_IP "DEACTIVATED"
-fi
-
-if [[ "$2" == "OPENTELEMETRY_SPANS" ]]
-then
-	removeAllInstrumentation
-	instrumentForOpenTelemetry $MY_IP
-fi
-
 
 echo "Building current version..."
 
