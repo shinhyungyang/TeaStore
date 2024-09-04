@@ -90,6 +90,14 @@ fi
 # Just test connection
 setupServer $TEASTORE_RUNNER_IP
 
+for AGENT_IP in "${@:2}"
+do
+	echo
+	echo "Setting up $AGENT_IP"
+	setupServer $AGENT_IP
+done
+
+
 durations=""
 loops=10
 for (( iteration=1; iteration<=$loops; iteration++ ))
@@ -100,7 +108,7 @@ do
 		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER
-		runOneExperiment " " kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER
+		runOneExperiment "KIEKER_ASPECTJ_TEXT" kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "KIEKER_ASPECTJ_BINARY" kieker_aspectj_binary_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER
 		runOneExperiment "KIEKER_BYTEBUDDY" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER
