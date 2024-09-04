@@ -23,7 +23,7 @@ function runLoadTest {
 	sed -i '/>num_user/{n;s/.*/\            <stringProp name="Argument.value"\>'$NUMUSER'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
 
 	java -jar $JMETER_HOME/bin/ApacheJMeter.jar \
-	       -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname localhost -Jport 8080 -n \
+	       -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname $TEASTORE_RUNNER_IP -Jport 8080 -n \
 	       -l $RESULTFILE
 
 	echo
