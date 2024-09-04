@@ -4,15 +4,9 @@ function getSum {
   awk '{sum += $1; square += $1^2} END {print sqrt(square / NR - (sum/NR)^2)" "sum/NR" "NR}'
 }
 
-function runOneExperiment {
-	PARAMETER=$1
-	RESULTFILE=$2
-	NUMUSER=$3
-	
-	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
-
-	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $HOST_SELF_IP $PARAMETER"
-
+function runLoadTest {
+	RESULTFILE=$1
+	NUMUSER=$2
 	echo
 	echo
 	echo "Building is finished; Starting load test"
@@ -35,6 +29,18 @@ function runOneExperiment {
 	echo
 	echo
 	echo "Load test is finished; Removing containers"
+}
+
+function runOneExperiment {
+	PARAMETER=$1
+	RESULTFILE=$2
+	NUMUSER=$3
+	
+	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
+
+	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $HOST_SELF_IP $PARAMETER"
+
+	runLoadTest $RESULTFILE $NUMUSER
 
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 	
