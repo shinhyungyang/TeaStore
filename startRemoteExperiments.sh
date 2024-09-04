@@ -54,6 +54,15 @@ function runOneExperiment {
 	sleep 5s
 }
 
+function setupServer {
+	CONNECTION_IP=$1
+	
+	ssh -q $CONNECTION_IP "exit"
+
+	ssh $CONNECTION_IP "if [ ! -d TeaStore ]; then git clone https://github.com/DaGeRe/TeaStore.git; fi"
+	ssh $CONNECTION_IP "cd TeaStore; git checkout kieker-debug; git pull"
+}
+
 set -e
 
 if [ $# -lt 1 ]
@@ -77,10 +86,7 @@ else
 fi
 
 # Just test connection
-ssh -q $1 "exit"
-
-ssh $TEASTORE_RUNNER_IP "if [ ! -d TeaStore ]; then git clone https://github.com/DaGeRe/TeaStore.git; fi"
-ssh $TEASTORE_RUNNER_IP "cd TeaStore; git checkout kieker-debug; git pull"
+setupServer $TEASTORE_RUNNER_IP
 
 durations=""
 loops=10
