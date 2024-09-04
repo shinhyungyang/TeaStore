@@ -1,3 +1,18 @@
+function waitForFullstartup {
+	server=$1
+	attempt=0
+	while [ $attempt -le 300 ]; do
+		# Check the status using curl and grep
+		if ! curl -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+		then
+			echo "Service is online. Exiting..."
+		break
+		fi
+		echo "Services are still partially offline. Checking again in 5 seconds..."
+		sleep 5
+	done
+}
+
 function resetInstrumentationFiles {
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-aspectj.jar
