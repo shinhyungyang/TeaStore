@@ -50,7 +50,6 @@ source functions.sh
 
 if [ "$2" ]
 then
-	ec
 	case "$2" in
 		"NO_INSTRUMENTATION") removeAllInstrumentation ;;
 		"DEACTIVATED") 
@@ -69,14 +68,13 @@ then
 			sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 			;;
 		"KIEKER_ASPECTJ_BINARY")
-			echo "Not supported yet";
-			exit 1;
+			useBinaryWriterKieker
 			;;
 		"KIEKER_BYTEBUDDY_TEXT")
 			instrumentForKiekerBytebuddy
 		"KIEKER_BYTEBUDDY_BINARY")
-			echo "Not supported yet";
-			exit 1;
+			instrumentForKiekerBytebuddy
+			useBinaryWriterKieker
 			;;
 		"OPENTELEMETRY_DEACTIVATED")
 			removeAllInstrumentation
