@@ -19,11 +19,13 @@ function runLoadTest {
 	sleep 60s
 
 	echo "Replacing user count by $NUMUSER"
-	
 	sed -i '/>num_user/{n;s/.*/\            <stringProp name="Argument.value"\>'$NUMUSER'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
+	
+	echo "Replacing host name by $TEASTORE_RUNNER_IP"
+	sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
 
 	java -jar $JMETER_HOME/bin/ApacheJMeter.jar \
-	       -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname $TEASTORE_RUNNER_IP -Jport 8080 -n \
+	       -t examples/jmeter/teastore_browse_nogui.jmx -n \
 	       -l $RESULTFILE
 
 	echo

@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t examples/jmeter/teastore_browse_nogui.jmx -Jhostname localhost -Jport 8080 -n 
+java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t examples/jmeter/teastore_browse_nogui.jmx -n 
 
 docker ps | grep teastore | awk '{print $1}' | xargs docker stop $1
 docker ps -a | grep teastore | awk '{print $1}' | xargs docker rm -f $1
