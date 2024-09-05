@@ -41,6 +41,12 @@ function runOneExperiment {
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER"
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
+	return_code=$?
+
+	if [ $return_code -ne 0 ]; then
+    		echo "Error: waitForStartup.sh failed with return code $return_code"
+    		return
+	fi
 	
 	index=2
 	for AGENT_IP in "${@:4}"

@@ -1,3 +1,21 @@
+function createDebugOutput {
+	index=1
+	folder="debug_$index"
+
+	while [ -d "$folder" ]
+	do
+		((index++))
+		folder="debug_$index"
+	done
+
+	mkdir $folder
+	docker ps &> $folder/dockerps.txt
+	for container in $(cat $folder/dockerps.txt | awk '{print $1}')
+	do
+		docker logs $container &> $folder/$container.txt
+	done
+}
+
 function waitForFullstartup {
 	server=$1
 	attempt=0
@@ -16,9 +34,10 @@ function waitForFullstartup {
 	if curl -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 	then
 		echo "Service is still offline after 300 attempts. Exiting..."
-		./debug.sh
-		exit 1
+		createDebugOutput
+		return 1
 	fi
+	return 0
 }
 
 function resetInstrumentationFiles {
