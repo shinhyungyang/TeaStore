@@ -6,11 +6,19 @@ function waitForFullstartup {
 		if ! curl -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 		then
 			echo "Service is online. Exiting..."
-		break
+			break
 		fi
-		echo "Services are still partially offline. Checking again in 5 seconds..."
+		echo "Services are still partially offline. Checking again in 5 seconds (attempt: $attempt)..."
 		sleep 5
+		((attempt++))
 	done
+	
+	if curl -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+	then
+		echo "Service is still offline after 300 attempts. Exiting..."
+		./debug.sh
+		exit 1
+	fi
 }
 
 function resetInstrumentationFiles {
