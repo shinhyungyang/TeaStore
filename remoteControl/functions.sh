@@ -132,11 +132,22 @@ function instrumentForOpenTelemetry {
 	fi	
 }
 
+function downloadAgent {
+	export VERSION_PATH=`curl "https://oss.sonatype.org/service/local/repositories/snapshots/content/net/kieker-monitoring/kieker/" | grep '<resourceURI>' | sed 's/ *<resourceURI>//g' | sed 's/<\/resourceURI>//g' | grep '/$' | grep -v ".xml" | head -n 1`
+	export AGENT_PATH=`curl "${VERSION_PATH}" | grep 'bytebuddy.jar</resourceURI' | sort | sed 's/ *<resourceURI>//g' | sed 's/<\/resourceURI>//g' | tail -1`
+	
+	AGENT_NAME=$(echo $AGENT_PATH | awk -F'/' '{print $NF}' | awk -F'-' '{print $1"-"$2"-"$5}')
+	
+	curl "${AGENT_PATH}" > "${AGENT_NAME}"
+	return $AGENT_NAME
+}
+
 function instrumentForKiekerBytebuddy {
 	if [ ! -f utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar ]
 	then
-		curl -L -O https://oss.sonatype.org/content/repositories/snapshots/net/kieker-monitoring/kieker/2.0.0-SNAPSHOT/kieker-2.0.0-20240903.203853-837-bytebuddy.jar
-		mv kieker-2.0.0-20240903.203853-837-bytebuddy.jar utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar
+		AGENT_NAME=$(downloadBytebuddyAgent)
+		# No the nicest solution, but for now, it stores the bytebuddy agent in a usable manner...
+		mv $AGENT_NAME utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar
 	fi
 
 	sed -i 's/kieker-2.0.0-SNAPSHOT-aspectj/kieker-2.0.0-SNAPSHOT-bytebuddy/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
