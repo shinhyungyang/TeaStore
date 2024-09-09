@@ -149,7 +149,7 @@ function instrumentForKiekerBytebuddy {
 		mv kieker-bytebuddy-agent.jar utilities/tools.descartes.teastore.dockerbase/kieker-bytebuddy-agent.jar
 	fi
 
-	sed -i 's/kieker-2.0.0-SNAPSHOT-aspectj/kieker-bytebuddy-agent.jar/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i 's/kieker-2.0.0-SNAPSHOT-aspectj/kieker-bytebuddy-agent/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	
 	echo 'echo "export KIEKER_SIGNATURES_INCLUDE=\"tools.descartes.teastore.*\"" >> /usr/local/tomcat/bin/setenv.sh' >> utilities/tools.descartes.teastore.dockerbase/start.sh
