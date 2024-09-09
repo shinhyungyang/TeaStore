@@ -40,6 +40,7 @@ function runOneExperiment {
 	
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER"
+	sleep 1
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP" ||
 	{
 		return_code=$?
