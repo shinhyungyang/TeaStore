@@ -114,7 +114,7 @@ loops=10
 for (( iteration=1; iteration<=$loops; iteration++ ))
 do
 	start=$(date +%s%N)
-	for NUMUSER in 1 2 4 8 16
+	for NUMUSER in 1 2 4 8
 	do
 		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
