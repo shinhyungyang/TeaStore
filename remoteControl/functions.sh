@@ -33,7 +33,7 @@ function waitForFullstartup {
 	
 	if curl -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 	then
-		echo "Service is still offline after 300 attempts. Exiting..."
+		echo "Service is still offline after 50 attempts. Exiting..."
 		createDebugOutput
 		return 1
 	fi
