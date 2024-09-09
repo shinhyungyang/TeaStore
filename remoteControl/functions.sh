@@ -19,7 +19,7 @@ function createDebugOutput {
 function waitForFullstartup {
 	server=$1
 	attempt=0
-	while [ $attempt -le 300 ]; do
+	while [ $attempt -le 50 ]; do
 		# Check the status using curl and grep
 		if ! curl -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 		then

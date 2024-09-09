@@ -48,6 +48,8 @@ function runOneExperiment {
 	    		return
 		fi
 	}
+	echo 
+	echo "Startup completed"
 	
 	index=2
 	for AGENT_IP in "${@:4}"
