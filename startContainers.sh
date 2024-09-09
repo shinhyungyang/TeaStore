@@ -95,7 +95,7 @@ fi
 
 echo "Building current version..."
 
-mvn clean package -DskipTests &> build.txt
+./mvnw clean package -DskipTests &> build.txt
 
 maven_exit_status=$?
 if [ $maven_exit_status -eq 1 ]; then
