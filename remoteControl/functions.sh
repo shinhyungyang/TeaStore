@@ -21,7 +21,7 @@ function waitForFullstartup {
 	attempt=0
 	while [ $attempt -le 50 ]; do
 		# Check the status using curl and grep
-		if ! curl --max-time 1 -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+		if ! curl --max-time 5 -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 		then
 			echo "Service is online. Exiting..."
 			break
@@ -31,7 +31,7 @@ function waitForFullstartup {
 		((attempt++))
 	done
 	
-	if curl --max-time 1 -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+	if curl --max-time 5 -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 	then
 		echo "Service is still offline after 50 attempts. Exiting..."
 		createDebugOutput
