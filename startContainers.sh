@@ -150,8 +150,8 @@ recommender_id=$(docker ps | grep "recommender" | awk '{print $1}')
 waitForContainerStartup $recommender_id 'org.apache.catalina.startup.Catalina.start Server startup in '
 
 # the database will only be on the main server
+database_id=$(docker ps | grep "teastore-db" | awk '{print $1}')
 if [ ! -z "$database_id" ]
-then
-	database_id=$(docker ps | grep "teastore-db" | awk '{print $1}')
+then	
 	waitForContainerStartup $database_id 'port: 3306'
 fi
