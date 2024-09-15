@@ -1,23 +1,5 @@
 #!/bin/bash
 
-function waitForContainerStartup {
-	containerName=$1
-	textToWaitFor=$2
-	
-	echo "Waiting for $containerName to be ready"
-	attempt=0
-	while [ $attempt -le 300 ]; do
-	    attempt=$(( $attempt + 1 ))
-	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
-	    result=$(docker logs $containerName 2>&1)
-	    if grep -q "$textToWaitFor" <<< $result ; then
-	      echo "$containerName is up!"
-	      break
-	    fi
-	    sleep 5
-	done
-}
-
 if [ $# -lt 1 ]
 then
 	echo "Please provide IP as parameter!"
