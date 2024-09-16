@@ -1,16 +1,15 @@
 #!/bin/bash
 
-source 'remoteControl/functions.sh'
+source 'functions.sh'
 
 function getMapping {
-	methods=$(cat kieker-results/teastore-*/kieker*/*dat | grep -v "RegistryClient\$1.<init>" | grep -v "2.0.0-SNAPSHOT" | awk -F';' '{print $3}' | awk '{print $NF}' | sort | uniq)
+	methods=$(cat ../kieker-results/teastore-*/kieker*/*dat | grep -v "RegistryClient\$1.<init>" | grep -v "2.0.0-SNAPSHOT" | awk -F';' '{print $3}' | awk '{print $NF}' | sort | uniq)
 
 	for method in $methods
 	do
 		echo -n "$method "
-		cat kieker-results/teastore-*/kieker*/*dat | grep -v "RegistryClient\$1.<init>" | awk -F';' '{print $3}' | grep $method | wc -l
+		cat ../kieker-results/teastore-*/kieker*/*dat | grep -v "RegistryClient\$1.<init>" | awk -F';' '{print $3}' | grep $method | wc -l
 	done
-
 }
 
 function stopTeaStore {
@@ -70,33 +69,35 @@ do
 	echo "Starting Iteration $iteration"
 	startAllContainers $TEASTORE_RUNNER_IP
 	
-	cd remoteControl/ && ./waitForStartup.sh $IP && cd .. 
+	./waitForStartup.sh $IP
 	stopTeaStore
-	sudo chown $(whoami) kieker-results/* -R
-
+	
+	echo "Collecting data..."
+	sudo chown $(whoami) ../kieker-results/* -R
 	getMapping &> loops_0_$iteration.txt
 
 	for LOOPS in 100 1000
 	do
 		echo "Starting loops: $loops"
 		echo "Replacing loops by $LOOPS"
-		sed -i 's/<stringProp name="LoopController.loops">[^<]*<\/stringProp>/<stringProp name="LoopController.loops">100<\/stringProp>/' examples/jmeter/teastore_browse_nogui.jmx
+		sed -i 's/<stringProp name="LoopController.loops">[^<]*<\/stringProp>/<stringProp name="LoopController.loops">100<\/stringProp>/' ../examples/jmeter/teastore_browse_nogui.jmx
 	
 		echo "Replacing host name by $TEASTORE_RUNNER_IP"
-		sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
+		sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' ../examples/jmeter/teastore_browse_nogui.jmx
 		
 		startAllContainers $TEASTORE_RUNNER_IP
-		cd remoteControl/ && ./waitForStartup.sh $IP && cd .. 
+		./waitForStartup.sh $IP
 		
 		echo "Startup beendet"
 		sleep 10
 		
-		java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t examples/jmeter/teastore_browse_nogui.jmx -n
+		java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t ../examples/jmeter/teastore_browse_nogui.jmx -n
 	
 		stopTeaStore
-		sudo chown $(whoami) kieker-results/* -R
+		
 		
 		echo "Collecting data..."
+		sudo chown $(whoami) ../kieker-results/* -R
 		getMapping &> loops_"$LOOPS"_$iteration.txt
 	done
 done
