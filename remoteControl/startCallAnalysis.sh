@@ -3,7 +3,7 @@
 source 'functions.sh'
 
 function getMapping {
-	docker run --rm -v $(pwd)/../kieker-results:/kieker-results -v $(pwd):/remoteControl fedora:latest bash -c "cd remoteControl && ./getMapping.sh"
+	docker run --rm -v $(pwd)/kieker-results:/kieker-results -v $(pwd):/remoteControl fedora:latest bash -c "cd remoteControl && ./getMapping.sh"
 }
 
 function stopTeaStore {
