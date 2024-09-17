@@ -73,7 +73,7 @@ do
 	do
 		echo "Starting loops: $loops"
 		echo "Replacing loops by $LOOPS"
-		sed -i 's/<stringProp name="LoopController.loops">[^<]*<\/stringProp>/<stringProp name="LoopController.loops">100<\/stringProp>/' ../examples/jmeter/teastore_browse_nogui.jmx
+		sed -i 's/<stringProp name="LoopController.loops">[^<]*<\/stringProp>/<stringProp name="LoopController.loops">'$LOOPS'<\/stringProp>/' ../examples/jmeter/teastore_browse_nogui.jmx
 	
 		echo "Replacing host name by $TEASTORE_RUNNER_IP"
 		sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' ../examples/jmeter/teastore_browse_nogui.jmx
