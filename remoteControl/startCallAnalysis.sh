@@ -84,9 +84,11 @@ do
 		./waitForStartup.sh $IP
 		
 		echo "Startup beendet"
-		sleep 30
+		sleep 60
 		
-		java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t ../examples/jmeter/teastore_browse_nogui.jmx -n
+		java -jar $JMETER_HOME/bin/ApacheJMeter.jar \
+			-t ../examples/jmeter/teastore_browse_nogui.jmx -n \
+			-l jmeter_"$LOOPS"_$iteration.csv
 	
 		stopTeaStore
 		sleep 5
