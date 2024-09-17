@@ -69,7 +69,7 @@ do
 	echo "Collecting data..."
 	getMapping &> loops_0_$iteration.txt
 
-	for LOOPS in 100 1000
+	for LOOPS in 10 100 1000
 	do
 		echo "Starting loops: $loops"
 		echo "Replacing loops by $LOOPS"
