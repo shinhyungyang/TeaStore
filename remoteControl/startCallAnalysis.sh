@@ -55,6 +55,8 @@ then
 	exit 1
 fi
 
+echo "It is assumed you've build already: ./mvnw clean package && cd tools/ && ./build_docker.sh && cd .. (If you didn't, please abort and start freshly)"
+
 TEASTORE_RUNNER_IP=$1
 
 for iteration in {1..5}
