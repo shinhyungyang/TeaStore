@@ -67,7 +67,6 @@ do
 	stopTeaStore
 	
 	echo "Collecting data..."
-	sudo chown $(whoami) ../kieker-results/* -R
 	getMapping &> loops_0_$iteration.txt
 
 	for LOOPS in 100 1000
@@ -91,7 +90,6 @@ do
 		
 		
 		echo "Collecting data..."
-		sudo chown $(whoami) ../kieker-results/* -R
 		getMapping &> loops_"$LOOPS"_$iteration.txt
 	done
 done
