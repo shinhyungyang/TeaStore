@@ -56,8 +56,8 @@ function runOneExperiment {
 	for AGENT_IP in "${@:4}"
 	do
 		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
-		ssh $AGENT_IP 'docker images -a | grep none | awk '{print $3}' | xargs docker rmi $1'
-		ssh $AGENT_IP 'docker volume prune'
+		ssh $AGENT_IP 'docker images -a | grep none | awk "{print $3}" | xargs docker rmi $1'
+		ssh $AGENT_IP 'y | docker volume prune'
 		ssh -t $AGENT_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER $index $AGENT_IP"
 		ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
 		((index++))
