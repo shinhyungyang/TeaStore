@@ -65,6 +65,8 @@ do
 	
 	./waitForStartup.sh $IP
 	stopTeaStore
+	sleep 5
+	sync
 	
 	echo "Collecting data..."
 	getMapping &> loops_0_$iteration.txt
@@ -82,12 +84,13 @@ do
 		./waitForStartup.sh $IP
 		
 		echo "Startup beendet"
-		sleep 10
+		sleep 30
 		
 		java -jar $JMETER_HOME/bin/ApacheJMeter.jar -t ../examples/jmeter/teastore_browse_nogui.jmx -n
 	
 		stopTeaStore
-		
+		sleep 5
+		sync
 		
 		echo "Collecting data..."
 		getMapping &> loops_"$LOOPS"_$iteration.txt
