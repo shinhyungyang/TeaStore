@@ -39,6 +39,8 @@ function runOneExperiment {
 	NUMUSER=$3
 	
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
+	ssh $TEASTORE_RUNNER_IP 'docker images -a | grep none | awk "{print $3}" | xargs docker rmi $1'
+	ssh $TEASTORE_RUNNER_IP 'y | docker volume prune'
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER"
 	sleep 1
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP" ||
