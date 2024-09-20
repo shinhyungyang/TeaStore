@@ -38,9 +38,13 @@ function runOneExperiment {
 	RESULTFILE=$2
 	NUMUSER=$3
 	
-	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender\|zipkin\|otel" | awk "{print \$1}" | xargs docker rm -f \$1'
+	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 	ssh $TEASTORE_RUNNER_IP 'docker images -a | grep none | awk "{print \$3}" | xargs --no-run-if-empty docker rmi $1'
 	ssh $TEASTORE_RUNNER_IP 'echo y | docker system prune --volumes'
+	
+	# Remove Zipkin, otel and elastic after the system has been pruned - we don't need to fetch the images everytime freshly
+	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "zipkin\|otel\|elastic" | awk "{print \$1}" | xargs docker rm -f \$1'
+	
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER"
 	sleep 1
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP" ||

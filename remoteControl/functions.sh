@@ -141,7 +141,11 @@ function instrumentForOpenTelemetry {
 	then	
 		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.logs.exporter=none -Dotel.traces.exporter=zipkin -Dotel.exporter.zipkin.endpoint=http://'$MY_IP':9411/api/v2/spans -Dotel.instrumentation.include=tools.descartes.teastore.* -Dotel.resource.attributes=service.name=$(hostname)|g' utilities/tools.descartes.teastore.dockerbase/start.sh
 	
-		docker run -d -p 9411:9411 openzipkin/zipkin
+		docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
+		docker run -d -p 9411:9411 \
+			-e STORAGE_TYPE=elasticsearch \
+			-e ES_HOSTS=$MY_IP:9200 \
+  			openzipkin/zipkin
 		
 		#sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.exporter.otlp.endpoint=http://'$MY_IP':4318|g' utilities/tools.descartes.teastore.dockerbase/start.sh
 		#docker run -d \
