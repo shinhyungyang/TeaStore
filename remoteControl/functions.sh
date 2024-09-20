@@ -143,6 +143,7 @@ function instrumentForOpenTelemetry {
 	
 		docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
 		docker run -d -p 9411:9411 \
+			-e JAVA_OPTS="-Xms1g -Xmx2g" \
 			-e STORAGE_TYPE=elasticsearch \
 			-e ES_HOSTS=$MY_IP:9200 \
   			openzipkin/zipkin
