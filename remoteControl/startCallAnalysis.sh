@@ -59,7 +59,7 @@ echo "It is assumed you've build already: ./mvnw clean package && cd tools/ && .
 
 TEASTORE_RUNNER_IP=$1
 
-for iteration in {1..5}
+for iteration in {1..30}
 do
 
 	echo "Starting Iteration $iteration"
@@ -73,7 +73,7 @@ do
 	echo "Collecting data..."
 	getMapping &> loops_0_$iteration.txt
 
-	for LOOPS in 10 100 1000
+	for LOOPS in 10 100 1000 10000
 	do
 		echo "Starting loops: $loops"
 		echo "Replacing loops by $LOOPS"
