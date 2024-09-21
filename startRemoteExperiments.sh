@@ -136,7 +136,8 @@ do
 		runOneExperiment "KIEKER_BYTEBUDDY_TEXT" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_BYTEBUDDY_BINARY" kieker_bytebuddy_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
-		runOneExperiment "OPENTELEMETRY_SPANS" otel_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "OPENTELEMETRY_ZIPKIN_MEMORY" otel_memory_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "OPENTELEMETRY_ZIPKIN_ELASTIC" otel_elastic_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 	done
 	end=$(date +%s%N)
 	duration=$(echo "($end-$start)/1000000" | bc)

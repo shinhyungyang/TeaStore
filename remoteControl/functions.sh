@@ -121,7 +121,7 @@ function removeAllInstrumentation {
 
 function instrumentForOpenTelemetry {
 	MY_IP=$1
-	DEACTIVATED=$2
+	TYPE=$2
 
 	if [ ! -f utilities/tools.descartes.teastore.dockerbase/opentelemetry-javaagent.jar ]
 	then
@@ -137,25 +137,36 @@ function instrumentForOpenTelemetry {
 	sed -i '/^EXPOSE 8080/i COPY opentelemetry-javaagent.jar \/opentelemetry\/agent\/agent.jar' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
 	
-	if [[ "$2" != "DEACTIVATED" ]]
-	then	
+	case "$TYPE" in
+		"OPENTELEMETRY_ZIPKIN_MEMORY")
+		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.logs.exporter=none -Dotel.traces.exporter=zipkin -Dotel.exporter.zipkin.endpoint=http://'$MY_IP':9411/api/v2/spans -Dotel.instrumentation.include=tools.descartes.teastore.* -Dotel.resource.attributes=service.name=$(hostname)|g' utilities/tools.descartes.teastore.dockerbase/start.sh
+			
+		docker run -d -p 9411:9411 \
+			--name zipkin \
+			-e JAVA_OPTS="-Xms1g -Xmx4g" \
+			openzipkin/zipkin
+		;;
+		"OPENTELEMETRY_ZIPKIN_ELASTIC")
 		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.logs.exporter=none -Dotel.traces.exporter=zipkin -Dotel.exporter.zipkin.endpoint=http://'$MY_IP':9411/api/v2/spans -Dotel.instrumentation.include=tools.descartes.teastore.* -Dotel.resource.attributes=service.name=$(hostname)|g' utilities/tools.descartes.teastore.dockerbase/start.sh
 	
 		docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
+		
 		docker run -d -p 9411:9411 \
+			--name zipkin \
 			-e JAVA_OPTS="-Xms1g -Xmx2g" \
 			-e STORAGE_TYPE=elasticsearch \
 			-e ES_HOSTS=$MY_IP:9200 \
-  			openzipkin/zipkin
-		
-		#sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.exporter.otlp.endpoint=http://'$MY_IP':4318|g' utilities/tools.descartes.teastore.dockerbase/start.sh
-		#docker run -d \
-		#	--name teastore-otel-collector \
-		#	-p 4318:4318 \
-		#	otel/opentelemetry-collector-contrib:0.108.0
-	else
+			-e ES_HTTP_LOGGING=BODY \
+			openzipkin/zipkin
+
+		# Elasticsearch zipkin works basically, but to get the dependencies, it is necessary to run the following:
+		#docker run --env STORAGE_TYPE=elasticsearch --env ES_HOSTS=$MY_IP:9200 --env ES_NODES_WAN_ONLY=true openzipkin/zipkin-dependencies
+		;;
+		"OPENTELEMETRY_DEACTIVATED")
 		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.metrics.exporter=none|g' utilities/tools.descartes.teastore.dockerbase/start.sh
-	fi	
+		;;
+		*) echo "Configuration $TYPE not found; Exiting"; exit 1;;
+	esac
 }
 
 function downloadBytebuddyAgent {

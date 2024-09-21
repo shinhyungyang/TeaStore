@@ -66,11 +66,15 @@ then
 			;;
 		"OPENTELEMETRY_DEACTIVATED")
 			removeAllInstrumentation
-			instrumentForOpenTelemetry $MY_IP "DEACTIVATED"
+			instrumentForOpenTelemetry $MY_IP "$2"
 			;;
-		"OPENTELEMETRY_SPANS")
+		"OPENTELEMETRY_ZIPKIN_MEMORY")
 			removeAllInstrumentation
-			instrumentForOpenTelemetry $MY_IP
+			instrumentForOpenTelemetry $MY_IP "$2"
+			;;
+		"OPENTELEMETRY_ZIPKIN_ELASTIC")
+			removeAllInstrumentation
+			instrumentForOpenTelemetry $MY_IP "$2"
 			;;
 		*) echo "Configuration $2 not found; Exiting"; exit 1;;
 esac
