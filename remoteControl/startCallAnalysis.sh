@@ -91,7 +91,7 @@ then
 		"OPENTELEMETRY_ZIPKIN_MEMORY")
 			cd ..
 			removeAllInstrumentation
-			instrumentForOpenTelemetry $MY_IP "$2"
+			instrumentForOpenTelemetry $TEASTORE_RUNNER_IP "$2"
 			;;
 		*) echo "Configuration $2 not supported for call analysis; Exiting"; exit 1;;
 	esac
