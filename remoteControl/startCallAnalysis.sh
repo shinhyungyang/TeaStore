@@ -26,15 +26,14 @@ function getMapping {
 	if [ "$1" == "OPENTELEMETRY_ZIPKIN_ELASTIC" ]
 	then
 		getOpenTelemetryCalls
+		docker rm -f elasticsearch
+		docker rm -f zipkin
 	fi
 }
 
 function stopTeaStore {
 	docker ps | grep teastore | awk '{print $1}' | xargs docker stop $1
 	docker ps -a | grep teastore | awk '{print $1}' | xargs docker rm -f $1
-	
-	docker rm -f elasticsearch
-	docker rm -f zipkin
 }
 
 function startAllContainers {
