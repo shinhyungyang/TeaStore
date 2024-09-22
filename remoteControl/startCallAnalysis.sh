@@ -89,6 +89,7 @@ then
 			# Do nothing, since this is the default configuration
 			;;
 		"OPENTELEMETRY_ZIPKIN_MEMORY")
+			cd ..
 			removeAllInstrumentation
 			instrumentForOpenTelemetry $MY_IP "$2"
 			;;
