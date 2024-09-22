@@ -6,7 +6,7 @@ function getOpenTelemetryCalls {
 	currentDay=$(date +%Y-%m-%d)
 	for service in teastore-registry-1 teastore-persistence-1 teastore-auth-1 teastore-recommender-1 teastore-image-1 teastore-webui-1
 	do
-		echo -n "$service "
+		echo -n "{\"$service\": "
 		curl --silent -X GET "localhost:9200/zipkin-span-"$currentDay"/_count" -H 'Content-Type: application/json' -d '{
 		  "query": {
 		    "term": {
@@ -14,7 +14,7 @@ function getOpenTelemetryCalls {
 		    }
 		  }
 		}'
-		echo
+		echo "},"
 	done
 }
 
