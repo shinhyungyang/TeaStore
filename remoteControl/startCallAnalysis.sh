@@ -32,6 +32,8 @@ function getMapping {
 function stopTeaStore {
 	docker ps | grep teastore | awk '{print $1}' | xargs docker stop $1
 	docker ps -a | grep teastore | awk '{print $1}' | xargs docker rm -f $1
+	
+	docker rm -f zipkin
 }
 
 function startAllContainers {
