@@ -10,7 +10,7 @@ function getOpenTelemetryCalls {
 		curl -X GET "localhost:9200/zipkin-span-"$currentDay"/_count" -H 'Content-Type: application/json' -d '{
 		  "query": {
 		    "term": {
-		      "localEndpoint.serviceName": '$service'
+		      "localEndpoint.serviceName": "'$service'"
 		    }
 		  }
 		}'
