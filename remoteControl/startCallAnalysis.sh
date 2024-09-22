@@ -7,7 +7,7 @@ function getOpenTelemetryCalls {
 	for service in teastore-registry-1 teastore-persistence-1 teastore-auth-1 teastore-recommender-1 teastore-image-1 teastore-webui-1
 	do
 		echo -n "$service "
-		curl -X GET "localhost:9200/zipkin-span-"$currentDay"/_count" -H 'Content-Type: application/json' -d '{
+		curl --silent -X GET "localhost:9200/zipkin-span-"$currentDay"/_count" -H 'Content-Type: application/json' -d '{
 		  "query": {
 		    "term": {
 		      "localEndpoint.serviceName": "'$service'"
