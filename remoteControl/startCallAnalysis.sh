@@ -37,6 +37,14 @@ function stopTeaStore {
 function startAllContainers {
 	MY_IP=$1
 	container_id=1
+		
+	if [ "$2" == "OPENTELEMETRY_ZIPKIN_MEMORY" ]
+	then
+		docker run -d -p 9411:9411 \
+			--name zipkin \
+			-e JAVA_OPTS="-Xms1g -Xmx4g" \
+			openzipkin/zipkin
+	fi
 	
 	MY_FOLDER=$(pwd)/kieker-results/
 	if [ -d $MY_FOLDER ] && [ ! -z "$( ls -A $MY_FOLDER )" ]
@@ -82,6 +90,7 @@ echo "It is assumed you've build already: ./mvnw clean package && cd tools/ && .
 
 TEASTORE_RUNNER_IP=$1
 
+cd ..
 if [ "$2" ]
 then
 	case "$2" in
@@ -89,7 +98,6 @@ then
 			# Do nothing, since this is the default configuration
 			;;
 		"OPENTELEMETRY_ZIPKIN_MEMORY")
-			cd ..
 			removeAllInstrumentation
 			instrumentForOpenTelemetry $TEASTORE_RUNNER_IP "$2"
 			;;
@@ -107,11 +115,13 @@ fi
 
 cd tools && ./build_docker.sh >> ../build.txt && cd ..
 
+cd remoteControl
+
 for iteration in {1..30}
 do
 
 	echo "Starting Iteration $iteration"
-	startAllContainers $TEASTORE_RUNNER_IP
+	startAllContainers $TEASTORE_RUNNER_IP $2
 	
 	./waitForStartup.sh $IP
 	stopTeaStore
@@ -130,7 +140,7 @@ do
 		echo "Replacing host name by $TEASTORE_RUNNER_IP"
 		sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' ../examples/jmeter/teastore_browse_nogui.jmx
 		
-		startAllContainers $TEASTORE_RUNNER_IP
+		startAllContainers $TEASTORE_RUNNER_IP $2
 		./waitForStartup.sh $IP
 		
 		echo "Startup beendet"
