@@ -14,6 +14,7 @@ function getOpenTelemetryCalls {
 		    }
 		  }
 		}'
+		echo
 	done
 }
 
