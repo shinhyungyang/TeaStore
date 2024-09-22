@@ -4,6 +4,7 @@ source 'functions.sh'
 
 function getOpenTelemetryCalls {
 	currentDay=$(date +%Y-%m-%d)
+	echo "["
 	for service in teastore-registry-1 teastore-persistence-1 teastore-auth-1 teastore-recommender-1 teastore-image-1 teastore-webui-1
 	do
 		echo -n "{\"$service\": "
@@ -15,7 +16,8 @@ function getOpenTelemetryCalls {
 		  }
 		}'
 		echo "},"
-	done
+	done | sed '$ s/,$//'
+	echo "]"
 }
 
 function getMapping {
