@@ -23,7 +23,7 @@ function getMapping {
 		docker run --rm -v $(pwd)/kieker-results:/kieker-results -v $(pwd):/remoteControl fedora:latest bash -c "cd remoteControl && ./getMapping.sh"
 	fi
 	
-	if [ "$1" == "OPENTELEMETRY_ZIPKIN_MEMORY" ]
+	if [ "$1" == "OPENTELEMETRY_ZIPKIN_ELASTIC" ]
 	then
 		getOpenTelemetryCalls
 	fi
@@ -41,7 +41,7 @@ function startAllContainers {
 	MY_IP=$1
 	container_id=1
 		
-	if [ "$2" == "OPENTELEMETRY_ZIPKIN_MEMORY" ]
+	if [ "$2" == "OPENTELEMETRY_ZIPKIN_ELASTIC" ]
 	then
 		docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
 		
@@ -107,7 +107,7 @@ then
 		"KIEKER_ASPECTJ_TEXT")
 			# Do nothing, since this is the default configuration
 			;;
-		"OPENTELEMETRY_ZIPKIN_MEMORY")
+		"OPENTELEMETRY_ZIPKIN_ELASTIC")
 			removeAllInstrumentation
 			instrumentForOpenTelemetry $TEASTORE_RUNNER_IP "$2"
 			;;
