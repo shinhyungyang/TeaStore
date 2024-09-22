@@ -180,7 +180,7 @@ function instrumentForOpenTelemetry {
 		#docker run --env STORAGE_TYPE=elasticsearch --env ES_HOSTS=$MY_IP:9200 --env ES_NODES_WAN_ONLY=true openzipkin/zipkin-dependencies
 		;;
 		"OPENTELEMETRY_DEACTIVATED")
-		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.metrics.exporter=none|g' utilities/tools.descartes.teastore.dockerbase/start.sh
+		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.traces.exporter=none|g' utilities/tools.descartes.teastore.dockerbase/start.sh
 		echo "otel.metrics.exporter=none" > utilities/tools.descartes.teastore.dockerbase/otel-config.properties
 		;;
 		*) echo "Configuration $TYPE not found; Exiting"; exit 1;;
