@@ -2,8 +2,31 @@
 
 source 'functions.sh'
 
+function getOpenTelemetryCalls {
+	currentDay=$(date +%Y-%m-%d)
+	for service in teastore-registry-1 teastore-persistence-1 teastore-auth-1 teastore-recommender-1 teastore-image-1 teastore-webui-1
+	do
+		echo -n "$service "
+		curl -X GET "localhost:9200/zipkin-span-"$currentDay"/_count" -H 'Content-Type: application/json' -d '{
+		  "query": {
+		    "term": {
+		      "localEndpoint.serviceName": '$service'
+		    }
+		  }
+		}'
+	done
+}
+
 function getMapping {
-	docker run --rm -v $(pwd)/kieker-results:/kieker-results -v $(pwd):/remoteControl fedora:latest bash -c "cd remoteControl && ./getMapping.sh"
+	if [ -z "$1" ] || [ "$1" == "KIEKER_ASPECTJ_TEXT" ]
+	then
+		docker run --rm -v $(pwd)/kieker-results:/kieker-results -v $(pwd):/remoteControl fedora:latest bash -c "cd remoteControl && ./getMapping.sh"
+	fi
+	
+	if [ "$1" == "OPENTELEMETRY_ZIPKIN_MEMORY" ]
+	then
+		getOpenTelemetryCalls
+	fi
 }
 
 function stopTeaStore {
@@ -59,6 +82,30 @@ echo "It is assumed you've build already: ./mvnw clean package && cd tools/ && .
 
 TEASTORE_RUNNER_IP=$1
 
+if [ "$2" ]
+then
+	case "$2" in
+		"KIEKER_ASPECTJ_TEXT")
+			# Do nothing, since this is the default configuration
+			;;
+		"OPENTELEMETRY_ZIPKIN_MEMORY")
+			removeAllInstrumentation
+			instrumentForOpenTelemetry $MY_IP "$2"
+			;;
+		*) echo "Configuration $2 not supported for call analysis; Exiting"; exit 1;;
+	esac
+fi
+
+./mvnw clean package -DskipTests &> build.txt
+
+maven_exit_status=$?
+if [ $maven_exit_status -eq 1 ]; then
+    echo "Maven build did not succeed - cancelling"
+    exit 1
+fi
+
+cd tools && ./build_docker.sh >> ../build.txt && cd ..
+
 for iteration in {1..30}
 do
 
@@ -71,7 +118,7 @@ do
 	sync
 	
 	echo "Collecting data..."
-	getMapping &> loops_0_$iteration.txt
+	getMapping $2 &> loops_0_$iteration.txt
 
 	for LOOPS in 10 100 1000 10000
 	do
@@ -97,6 +144,6 @@ do
 		sync
 		
 		echo "Collecting data..."
-		getMapping &> loops_"$LOOPS"_$iteration.txt
+		getMapping $2 &> loops_"$LOOPS"_$iteration.txt
 	done
 done
