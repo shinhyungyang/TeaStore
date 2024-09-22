@@ -33,6 +33,7 @@ function stopTeaStore {
 	docker ps | grep teastore | awk '{print $1}' | xargs docker stop $1
 	docker ps -a | grep teastore | awk '{print $1}' | xargs docker rm -f $1
 	
+	docker rm -f elasticsearch
 	docker rm -f zipkin
 }
 
@@ -42,10 +43,17 @@ function startAllContainers {
 		
 	if [ "$2" == "OPENTELEMETRY_ZIPKIN_MEMORY" ]
 	then
+		docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
+		
 		docker run -d -p 9411:9411 \
 			--name zipkin \
-			-e JAVA_OPTS="-Xms1g -Xmx4g" \
+			-e JAVA_OPTS="-Xms1g -Xmx2g" \
+			-e STORAGE_TYPE=elasticsearch \
+			-e ES_HOSTS=$MY_IP:9200 \
+			-e ES_HTTP_LOGGING=BODY \
 			openzipkin/zipkin
+		
+		sleep 5
 	fi
 	
 	MY_FOLDER=$(pwd)/kieker-results/
