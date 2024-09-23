@@ -33,13 +33,31 @@ function waitForContainerStartup {
 	    sleep 5
 	done
 }
+function waitForPodStartup {
+	containerName=$1
+	textToWaitFor=$2
+	
+	echo "Waiting for $containerName to be ready"
+	attempt=0
+	while [ $attempt -le 300 ]; do
+	    attempt=$( $attempt + 1 )
+	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
+      result=$(kubectl logs $containerName 2>&1)
+	    if grep -q "$textToWaitFor" <<< $result ; then
+	      echo "$containerName is up!"
+	      break
+	    fi
+	    sleep 5
+	done
+}
 
 function waitForFullstartup {
 	server=$1
+	port=$2
 	attempt=0
 	while [ $attempt -le 50 ]; do
 		# Check the status using curl and grep
-		if ! curl --max-time 5 -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+		if ! curl --max-time 5 -s http://$server:$port/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 		then
 			echo "Service is online. Exiting..."
 			break
@@ -49,7 +67,7 @@ function waitForFullstartup {
 		((attempt++))
 	done
 	
-	if curl --max-time 5 -s http://$server:8080/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
+	if curl --max-time 5 -s http://$server:$port/tools.descartes.teastore.webui/status 2>&1 | grep -q "Offline"
 	then
 		echo "Service is still offline after 50 attempts. Exiting..."
 		createDebugOutput

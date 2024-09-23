@@ -1,0 +1,33 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-persistence
+spec:
+  selector:
+      matchLabels:
+        app: teastore
+        run: teastore-persistence
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-persistence
+    spec:
+      containers:
+      - name: teastore-persistence
+        image: teastore-persistence:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: USE_POD_IP
+          value: "true"
+        - name: REGISTRY_HOST
+          value: "teastore-registry"
+        - name: DB_HOST
+          value: "teastore-db"
+        - name: DB_PORT
+          value: "3306"
+        - name: LOG_TO_FILE
+          value: "true"

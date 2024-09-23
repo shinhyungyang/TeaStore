@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kieker Trace Analysis Graph Generator</title>
+    <style>
+      .image_heading {
+        display: flex;
+        align-items: center;
+      }
+      .image_heading img {
+        width: 200px; 
+        height: 50px;
+        margin-left: 20px; 
+      }
+      iframe {
+        position: relative;
+        border: 3px solid #2ca144;
+        display: block;
+        margin: 20px auto;
+        overflow: hidden;
+      }
+    </style>
+
+</head>
+<body>
+
+    <div class="image_heading">
+        <h1>Kieker Trace Analysis Graph Generator (TeaStore)</h1>
+        <img src="images/Kieker_TeaStore.png" alt="Logo">
+    </div>
+
+    <!-- List for selecting graoh type -->
+    <div>
+      
+    </div>
+    <label for="graph_type">Select Graph Type:</label>
+    <select id="graph_type">
+        <option value="type1">Deployment Operation Dependency Graph</option>
+        <option value="type2">Aggregated Deployment Call Tree</option>
+    </select>
+
+    <button id="generateBtn">Generate Graph</button>
+    <p id="error-message" style="color: red;"></p>
+
+    <!-- iFrame to show the PDF Graphs -->
+    <div class="iframe-container">
+        <iframe id="pdf-viewer" style="width: 95%; height: 800px;" src=""></iframe>
+    </div>
+
+    <script src="iframe_height.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>

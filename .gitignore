@@ -13,6 +13,9 @@ interfaces/tools.descartes.teastore.entities/.classpath
 /e2e-tests/node_modules/
 /e2e-tests/cypress/videos
 /e2e-tests/cypress/screenshots
+/examples/live-demo/images/*.tar
+/utilities/tools.descartes.teastore.kieker.oteltransformer/otel-transformer-2.0.0-SNAPSHOT.zip
+/utilities/tools.descartes.teastore.kieker.demoserver/trace-analysis.zip
 target/
 build.txt
 jmeter.log

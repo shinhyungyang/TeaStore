@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teastore-otel-transformer
+spec:
+  selector:
+    matchLabels:
+      app: teastore
+      run: teastore-otel-transformer
+  template:
+    metadata:
+      labels:
+        app: teastore
+        run: teastore-otel-transformer
+    spec:
+      containers:
+      - name: teastore-otel-transformer
+        image: teastore-otel-transformer:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 10001
+---
+# DNS name service to send the logs over the internal 
+# k8s network
+apiVersion: v1
+kind: Service
+metadata:
+  name: teastore-otel-transformer-service
+  labels:
+    app: teastore
+    run: teastore-otel-transformer-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 10001
+      targetPort: 10001
+  selector:
+    run: teastore-otel-transformer
