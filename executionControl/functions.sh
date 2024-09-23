@@ -69,16 +69,16 @@ function startContainers {
 		docker run --hostname=teastore-db-$CONTAINER_ID \
 			-p 3306:3306 -d ${registry}teastore-db
 		docker run --hostname=teastore-registry-$CONTAINER_ID \
-			-e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=10000" -p 10000:8080 -d ${registry}teastore-registry 
+			-e "HOST_NAME=$REGISTRY_IP" -e "SERVICE_PORT=10000" -p 10000:8080 -d ${registry}teastore-registry 
 		docker run --hostname=teastore-persistence-$CONTAINER_ID \
-		-v $MY_FOLDER/teastore-persistence:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=1111" -e "DB_HOST=$MY_IP" -e "DB_PORT=3306" -p 1111:8080 -d ${registry}teastore-persistence
+		-v $MY_FOLDER/teastore-persistence:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$REGISTRY_IP" -e "SERVICE_PORT=1111" -e "DB_HOST=$REGISTRY_IP" -e "DB_PORT=3306" -p 1111:8080 -d ${registry}teastore-persistence
 	docker run --hostname=teastore-auth-$CONTAINER_ID \
-		-v $MY_FOLDER/teastore-auth:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=2222" -p 2222:8080 -d ${registry}teastore-auth
+		-v $MY_FOLDER/teastore-auth:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$REGISTRY_IP" -e "SERVICE_PORT=2222" -p 2222:8080 -d ${registry}teastore-auth
 	docker run --hostname=teastore-recommender-$CONTAINER_ID \
-		-v $MY_FOLDER/teastore-recommender:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=3333" -p 3333:8080 -d ${registry}teastore-recommender
+		-v $MY_FOLDER/teastore-recommender:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$REGISTRY_IP" -e "SERVICE_PORT=3333" -p 3333:8080 -d ${registry}teastore-recommender
 	docker run --hostname=teastore-image-$CONTAINER_ID \
-		-v $MY_FOLDER/teastore-image:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=4444" -p 4444:8080 -d ${registry}teastore-image
+		-v $MY_FOLDER/teastore-image:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$REGISTRY_IP" -e "SERVICE_PORT=4444" -p 4444:8080 -d ${registry}teastore-image
 	docker run --hostname=teastore-webui-$CONTAINER_ID \
-		-v $MY_FOLDER/teastore-webui:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=8080" -p 8080:8080 -d ${registry}teastore-webui
+		-v $MY_FOLDER/teastore-webui:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$REGISTRY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$REGISTRY_IP" -e "SERVICE_PORT=8080" -p 8080:8080 -d ${registry}teastore-webui
 	fi
 }
