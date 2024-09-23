@@ -3,12 +3,12 @@
 source 'functions.sh'
 
 function getOpenTelemetryCalls {
-	currentDay=$(date +%Y-%m-%d)
+	zipkin_index_name=$(curl --silent localhost:9200/_cat/indices | tr " " "\n" | grep zipkin)
 	echo "["
 	for service in teastore-registry-1 teastore-persistence-1 teastore-auth-1 teastore-recommender-1 teastore-image-1 teastore-webui-1
 	do
 		echo -n "{\"$service\": "
-		curl --silent -X GET "localhost:9200/zipkin-span-"$currentDay"/_count" -H 'Content-Type: application/json' -d '{
+		curl --silent -X GET "localhost:9200/"$zipkin_index_name"/_count" -H 'Content-Type: application/json' -d '{
 		  "query": {
 		    "term": {
 		      "localEndpoint.serviceName": "'$service'"
