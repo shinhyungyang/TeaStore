@@ -1,16 +1,16 @@
 /**
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package tools.descartes.teastore.kieker.rabbitmq;
 
 import java.util.concurrent.Executors;
@@ -25,7 +25,7 @@ import org.apache.log4j.BasicConfigurator;
 
 /**
  * Application Lifecycle Listener implementation class Registry Client Startup.
- * 
+ *
  * @author Simon Eismann
  *
  */
@@ -33,6 +33,7 @@ import org.apache.log4j.BasicConfigurator;
 public class LogReaderStartup implements ServletContextListener {
   private static ScheduledExecutorService logReaderStarter;
   private static ScheduledExecutorService fileWriterStarter;
+  private static ScheduledExecutorService logSenderStarter;
 
   /**
    * Also set this accordingly in RegistryClientStartup.
@@ -48,10 +49,11 @@ public class LogReaderStartup implements ServletContextListener {
   /**
    * @see ServletContextListener#contextDestroyed(ServletContextEvent)
    * @param event
-   *          The servlet context event at destruction.
+   *              The servlet context event at destruction.
    */
   public void contextDestroyed(ServletContextEvent event) {
     stopFileWriter();
+    stopLogSender();
     logReaderStarter.shutdownNow();
     try {
       logReaderStarter.awaitTermination(10, TimeUnit.SECONDS);
@@ -73,12 +75,25 @@ public class LogReaderStartup implements ServletContextListener {
   }
 
   /**
+   * stops the log sender
+   */
+  public static void stopLogSender() {
+    logSenderStarter.shutdownNow();
+    try {
+      logSenderStarter.awaitTermination(10, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
    * @see ServletContextListener#contextInitialized(ServletContextEvent)
    * @param event
-   *          The servlet context event at initialization.
+   *              The servlet context event at initialization.
    */
   public void contextInitialized(ServletContextEvent event) {
     startFileWriter();
+    startLogSender();
     logReaderStarter = Executors.newSingleThreadScheduledExecutor();
     BasicConfigurator.configure();
     logReaderStarter.schedule(new LogReaderDaemon(), 10, TimeUnit.SECONDS);
@@ -92,4 +107,13 @@ public class LogReaderStartup implements ServletContextListener {
     fileWriterStarter.schedule(new FileWriterDaemon(), 10, TimeUnit.SECONDS);
   }
 
+  public static void startLogSender() {
+    System.out.println("TRACE ANALYSIS LOG: Starting Log Sender Thread Executor");
+    try {
+      logSenderStarter = Executors.newSingleThreadScheduledExecutor();
+      logSenderStarter.schedule(new SocketLogSender(), 10, TimeUnit.SECONDS);
+    } catch (Exception e) {
+      e.getMessage();
+    }
+  }
 }
