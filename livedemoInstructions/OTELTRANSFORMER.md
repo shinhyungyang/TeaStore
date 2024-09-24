@@ -4,23 +4,22 @@ You will need to have the following:
 
 1.  minikube
 2.  docker
-3.  maven
-4.  Make sure you got JDK 11 or above installed and $JAVA_HOME set correctly 
-5.  ExplorViz
+3.  Make sure you got JDK 11 or above installed and $JAVA_HOME set correctly 
+4.  ExplorViz
 	1. clone the **ExplorViz** Repository
 		```
         git clone https://github.com/ExplorViz/deployment.git
 		```
 		
-6.  Kieker
+5.  Kieker
 	1. clone the **Kieker** Repository   
 	 ```
 	 git clone https://github.com/kieker-monitoring/kieker.git
 	 ```
 	 
-7. Make sure kieker is  built via `./gradlew assemble -x test -x check -x apidoc` (we use the current 2.0.0-SNAPSHOT)
+6. Make sure kieker is  built via `./gradlew assemble -x test -x check -x apidoc` (we use the current 2.0.0-SNAPSHOT)
 
-8. Copy Kieker's OTel Transformer .zip file into the TeaStore:
+7. Copy Kieker's OTel Transformer .zip file into the TeaStore:
 	1. Kieker OTel Transformer can be found in `/kieker/tools/otel-transformer/build/distributions/otel-transformer-2.0.0-SNAPSHOT.zip`
 	2. The location (TeaStore repository) where it should be pasted is `/TeaStore/utilities/tools.descartes.teastore.kieker.oteltransformer/`
 
