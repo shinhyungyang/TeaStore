@@ -16,8 +16,11 @@ Check out our [Getting Started Guide](GET_STARTED.md) for information on how to 
       1. [LIMBO HTTP Load Generator](GET_STARTED.md#211-limbo-http-load-generator)
       2. [JMeter™](GET_STARTED.md#212-jmeter)
    2. [Instrumenting the TeaStore](GET_STARTED.md#22-instrumenting-the-teastore)
-      1. [Docker containers with Kieker](#221-docker-containers-with-kieker)
+      1. [Docker containers with Kieker](GET_STARTED.md#221-docker-containers-with-kieker)
       2. [OpenTracing with Kubernetes and Istio](GET_STARTED.md#222-opentracing-with-kubernetes-and-istio)
+   3. [Kieker Instrumentation Live Demonstration](./livedemoInstructions/)
+      1. [Kieker with ExplorViz visualization](./livedemoInstructions/OTELTRANSFORMER.md)
+      2. [Kieker Trace Analysis](./livedemoInstructions/TRACEANALYSIS.md)
 3. [Building and Customizing the TeaStore](GET_STARTED.md#3-building-and-customizing-the-teastore)
 
 ## Cite Us
