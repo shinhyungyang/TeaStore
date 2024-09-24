@@ -40,7 +40,7 @@ function waitForPodStartup {
 	echo "Waiting for $containerName to be ready"
 	attempt=0
 	while [ $attempt -le 300 ]; do
-	    attempt=$( $attempt + 1 )
+      attempt=$(( $attempt + 1 ))
 	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
       result=$(kubectl logs $containerName 2>&1)
 	    if grep -q "$textToWaitFor" <<< $result ; then

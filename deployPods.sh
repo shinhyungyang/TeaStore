@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source remoteControl/functions.sh
+source executionControl/functions.sh
 
 echo "Checking Kubernetes cluster status..."
 
