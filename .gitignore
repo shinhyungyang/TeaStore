@@ -16,6 +16,7 @@ interfaces/tools.descartes.teastore.entities/.classpath
 /examples/live-demo/images/*.tar
 /utilities/tools.descartes.teastore.kieker.oteltransformer/otel-transformer-2.0.0-SNAPSHOT.zip
 /utilities/tools.descartes.teastore.kieker.demoserver/trace-analysis.zip
+/utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 target/
 build.txt
 jmeter.log
