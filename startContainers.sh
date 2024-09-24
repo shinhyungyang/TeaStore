@@ -27,7 +27,7 @@ MY_FOLDER="$BASE_DIR/kieker-results/"
 
 set -e
 
-source remoteControl/functions.sh
+source executionControl/functions.sh
 
 resetInstrumentationFiles
 

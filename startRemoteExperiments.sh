@@ -47,7 +47,7 @@ function runOneExperiment {
 	
 	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER"
 	sleep 1
-	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP" ||
+	ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/executionControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP" ||
 	{
 		return_code=$?
 		if [ $return_code -ne 0 ]; then
@@ -65,7 +65,7 @@ function runOneExperiment {
 		ssh $AGENT_IP 'docker images -a | grep none | awk "{print \$3}" | xargs --no-run-if-empty docker rmi $1'
 		ssh $AGENT_IP 'echo y | docker volume prune'
 		ssh -t $AGENT_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER $index $AGENT_IP"
-		ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/remoteControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
+		ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/executionControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
 		((index++))
 	done
 	

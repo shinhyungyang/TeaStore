@@ -23,7 +23,7 @@ function getOpenTelemetryCalls {
 function getMapping {
 	if [ -z "$1" ] || [ "$1" == "KIEKER_ASPECTJ_TEXT" ]
 	then
-		docker run --rm -v $(pwd)/kieker-results:/kieker-results -v $(pwd):/remoteControl fedora:latest bash -c "cd remoteControl && ./getMapping.sh"
+		docker run --rm -v $(pwd)/kieker-results:/kieker-results -v $(pwd):/executionControl fedora:latest bash -c "cd executionControl && ./getMapping.sh"
 	fi
 	
 	if [ "$1" == "OPENTELEMETRY_ZIPKIN_ELASTIC" ]
@@ -127,7 +127,7 @@ fi
 
 cd tools && ./build_docker.sh >> ../build.txt && cd ..
 
-cd remoteControl
+cd executionControl
 
 for iteration in {1..30}
 do
