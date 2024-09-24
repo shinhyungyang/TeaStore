@@ -29,7 +29,6 @@ set -e
 
 source executionControl/functions.sh
 
-resetInstrumentationFiles
 
 
 if [ "$2" ]
