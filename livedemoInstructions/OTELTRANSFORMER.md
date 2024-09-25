@@ -36,7 +36,7 @@ You will need to have the following:
 
 5. Start the Kieker OTel Transformer and the TeaStore (via minikube Kubernetes):
     1. The script will require sudo permissions to run the maven comand:
-    2. `./startPods.sh $IP TCP` 
+    2. `./startPods.sh $IP OTELTRANSFORMER` 
     3. The TeaStore will be exposed at `http://$MINIKUBE_IP:30080/`
     4.  ExplorViz will be exposed at `http://$IP:8080/`
 6.  Make sure to restart minikube when applying changes.

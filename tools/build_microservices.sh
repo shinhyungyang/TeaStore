@@ -10,7 +10,6 @@ print_usage() {
 }
 
 docker build -t "teastore-db:latest" ../utilities/tools.descartes.teastore.database/
-docker build -t "teastore-kieker-rabbitmq:latest" ../utilities/tools.descartes.teastore.kieker.rabbitmq/
 docker build -t "teastore-base:latest" ../utilities/tools.descartes.teastore.dockerbase/
 perl -i -pe's|.*FROM descartesresearch/|FROM '"${registry}"'|g' ../services/tools.descartes.teastore.*/Dockerfile
 docker build -t "teastore-registry:latest" ../services/tools.descartes.teastore.registry/
@@ -22,13 +21,12 @@ docker build -t "teastore-recommender:latest" ../services/tools.descartes.teasto
 perl -i -pe's|.*FROM '"${registry}"'|FROM descartesresearch/|g' ../services/tools.descartes.teastore.*/Dockerfile
 
 # Delete existing .tar files before saving
-for image in teastore-db teastore-kieker-rabbitmq teastore-base teastore-registry teastore-persistence teastore-image teastore-webui teastore-auth teastore-recommender; do
+for image in teastore-db teastore-base teastore-registry teastore-persistence teastore-image teastore-webui teastore-auth teastore-recommender; do
     rm -f "${image_output_dir}/${image}.tar"
 done
 
 # Try to save images
 docker save -o "${image_output_dir}/teastore-db.tar" "teastore-db"
-docker save -o "${image_output_dir}/teastore-kieker-rabbitmq.tar" "teastore-kieker-rabbitmq"
 docker save -o "${image_output_dir}/teastore-base.tar" "teastore-base"
 docker save -o "${image_output_dir}/teastore-registry.tar" "teastore-registry"
 docker save -o "${image_output_dir}/teastore-persistence.tar" "teastore-persistence"
