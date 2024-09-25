@@ -34,17 +34,17 @@ function waitForContainerStartup {
 	done
 }
 function waitForPodStartup {
-	containerName=$1
+	podName=$1
 	textToWaitFor=$2
 	
-	echo "Waiting for $containerName to be ready"
+	echo "Waiting for $podName to be ready"
 	attempt=0
 	while [ $attempt -le 300 ]; do
       attempt=$(( $attempt + 1 ))
-	    echo "Waiting for $containerName to be up (attempt: $attempt)..."
-      result=$(kubectl logs $containerName 2>&1)
+	    echo "Waiting for $podName to be up (attempt: $attempt)..."
+      result=$(kubectl logs $podName 2>&1)
 	    if grep -q "$textToWaitFor" <<< $result ; then
-	      echo "$containerName is up!"
+	      echo "$podName is up!"
 	      break
 	    fi
 	    sleep 5
