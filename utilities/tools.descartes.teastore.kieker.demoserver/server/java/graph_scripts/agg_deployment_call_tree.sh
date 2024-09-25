@@ -13,7 +13,6 @@ trace-analysis/bin/trace-analysis \
    --short-labels \
    --ignore-invalid-traces
 
-
 echo "Converting Graph into PDF"
 cd out/
 

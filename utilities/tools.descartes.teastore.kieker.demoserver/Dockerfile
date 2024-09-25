@@ -25,8 +25,9 @@ RUN mkdir -p $KIEKER_HOME
 COPY server/ $KIEKER_HOME
 
 # Extract Kieker Trace Analysis Binaries
-COPY trace-analysis.zip /trace-analysis.zip
-RUN unzip trace-analysis.zip -d $KIEKER_HOME/java/trace-analysis
+COPY trace-analysis-1.15.zip /trace-analysis.zip
+RUN unzip trace-analysis.zip 
+RUN cp -r trace-analysis-1.15/* "$KIEKER_HOME/java/trace-analysis"
 
 RUN chmod +x $KIEKER_HOME/java/compileAndRunJava.sh
 RUN chmod +x $KIEKER_HOME/java/graph_scripts/agg_deployment_call_tree.sh
