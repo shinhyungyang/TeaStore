@@ -6,7 +6,7 @@ You will need to have the following:
 2.  docker
 3.  Make sure you got JDK 11 or above installed and $JAVA_HOME set correctly 
 4.  Kieker
-	1. Download the **Kieker** 1.15.4 Binaries
+	1. Download the **Kieker** 1.15 Binaries
 	 ```
      https://github.com/kieker-monitoring/kieker/releases/download/1.15/kieker-1.15-binaries.zip
 	 ```
