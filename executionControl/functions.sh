@@ -60,7 +60,7 @@ function waitForFullstartup {
 
 function resetInstrumentationFiles {
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
-	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-aspectj.jar
+	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-aspectj.jar
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
 
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
@@ -112,7 +112,7 @@ function removeAllInstrumentation {
                 mv temp.xml $pomFile
        done
        
-       sed -i '/^COPY kieker-2.0.0-SNAPSHOT-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+       sed -i '/^COPY kieker-2.0.0-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        sed -i '/^COPY kieker\.monitoring\.properties/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        rm utilities/tools.descartes.teastore.dockerbase/kieker-*
@@ -130,7 +130,7 @@ function instrumentForOpenTelemetry {
 	fi
 	
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
-	sed -i '/^COPY kieker-2.0.0-SNAPSHOT-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i '/^COPY kieker-2.0.0-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	sed -i '/^COPY kieker\.monitoring\.properties/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	
@@ -188,23 +188,25 @@ function instrumentForOpenTelemetry {
 }
 
 function downloadBytebuddyAgent {
-	export VERSION_PATH=`curl "https://oss.sonatype.org/service/local/repositories/snapshots/content/net/kieker-monitoring/kieker/" | grep '<resourceURI>' | sed 's/ *<resourceURI>//g' | sed 's/<\/resourceURI>//g' | grep '/$' | grep -v ".xml" | head -n 1`
-	export AGENT_PATH=`curl "${VERSION_PATH}" | grep 'bytebuddy.jar</resourceURI' | sort | sed 's/ *<resourceURI>//g' | sed 's/<\/resourceURI>//g' | tail -1`
+	#export VERSION_PATH=`curl "https://oss.sonatype.org/service/local/repositories/snapshots/content/net/kieker-monitoring/kieker/" | grep '<resourceURI>' | sed 's/ *<resourceURI>//g' | sed 's/<\/resourceURI>//g' | grep '/$' | grep -v ".xml" | head -n 1`
+	#export AGENT_PATH=`curl "${VERSION_PATH}" | grep 'bytebuddy.jar</resourceURI' | sort | sed 's/ *<resourceURI>//g' | sed 's/<\/resourceURI>//g' | tail -1`
 	
-	#AGENT_NAME=$(echo $AGENT_PATH | awk -F'/' '{print $NF}' | awk -F'-' '{print $1"-"$2"-"$5}')
+	AGENT_PATH="https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.0/kieker-2.0.0-bytebuddy.jar"
+	
+	AGENT_NAME=$(echo $AGENT_PATH | awk -F'/' '{print $NF}' | awk -F'-' '{print $1"-"$2"-"$5}')
 	
 	curl "${AGENT_PATH}" > kieker-bytebuddy-agent.jar
 }
 
 function instrumentForKiekerBytebuddy {
-	if [ ! -f utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-SNAPSHOT-bytebuddy.jar ]
+	if [ ! -f utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-bytebuddy.jar ]
 	then
 		downloadBytebuddyAgent
 		# No the nicest solution, but for now, it stores the bytebuddy agent in a usable manner...
 		mv kieker-bytebuddy-agent.jar utilities/tools.descartes.teastore.dockerbase/kieker-bytebuddy-agent.jar
 	fi
 
-	sed -i 's/kieker-2.0.0-SNAPSHOT-aspectj/kieker-bytebuddy-agent/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i 's/kieker-2.0.0-aspectj/kieker-bytebuddy-agent/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	
 	echo 'echo "export KIEKER_SIGNATURES_INCLUDE=\"tools.descartes.teastore.*\"" >> /usr/local/tomcat/bin/setenv.sh' >> utilities/tools.descartes.teastore.dockerbase/start.sh
