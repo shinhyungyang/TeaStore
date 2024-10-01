@@ -42,19 +42,17 @@ then
 			git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
 			sed -i 's/\(export JAVA_OPTS=".*\)"/\1 -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter -Dkieker.monitoring.core.controller.WriterController.RecordQueueFQN=kieker.monitoring.writer.dump.DumpQueue"/' utilities/tools.descartes.teastore.dockerbase/start.sh
 			;;
-		"TCP")
-			# nohup is necessary on Rocky Linux, otherwise, the process gets finished after script end; with Ubuntu, it works without
-			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
-	
-			sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
-			sed -i "s/#kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
-			sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
-			;;
 		"KIEKER_ASPECTJ_TEXT")
 			# Do nothing, since this is the default configuration
 			;;
 		"KIEKER_ASPECTJ_BINARY")
 			useBinaryWriterKieker
+			;;
+		"KIEKER_ASPECTJ_TCP")
+			# nohup is necessary on Rocky Linux, otherwise, the process gets finished after script end; with Ubuntu, it works without
+			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
+	
+			useTCPWriterKieker
 			;;
 		"KIEKER_BYTEBUDDY_TEXT")
 			instrumentForKiekerBytebuddy

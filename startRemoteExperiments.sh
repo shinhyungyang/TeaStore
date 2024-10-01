@@ -132,7 +132,7 @@ do
 		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_ASPECTJ_TEXT" kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_ASPECTJ_BINARY" kieker_aspectj_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
-		runOneExperiment "TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_ASPECTJ_TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_BYTEBUDDY_TEXT" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_BYTEBUDDY_BINARY" kieker_bytebuddy_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}

@@ -217,3 +217,9 @@ function instrumentForKiekerBytebuddy {
 function useBinaryWriterKieker {
 	sed -i '/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/a kieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.BinaryLogStreamHandler' utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 }
+
+function useTCPWriterKieker {
+	sed -i "s/kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/#kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+	sed -i "s/#kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/kieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+	sed -i "s/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=localhost/kieker.monitoring.writer.tcp.SingleSocketTcpWriter.hostname=$1/g" utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
+}
