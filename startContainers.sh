@@ -29,10 +29,9 @@ set -e
 
 source executionControl/functions.sh
 
-resetInstrumentationFiles
-
 if [ "$2" ]
 then
+	resetInstrumentationFiles
 	case "$2" in
 		"NO_INSTRUMENTATION") removeAllInstrumentation ;;
 		"DEACTIVATED") 
