@@ -61,6 +61,13 @@ then
 			instrumentForKiekerBytebuddy
 			useBinaryWriterKieker
 			;;
+		"KIEKER_BYTEBUDDY_TCP")
+			# nohup is necessary on Rocky Linux, otherwise, the process gets finished after script end; with Ubuntu, it works without
+			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
+	
+			instrumentForKiekerBytebuddy
+			useTCPWriterKieker
+			;;
 		"OPENTELEMETRY_DEACTIVATED")
 			removeAllInstrumentation
 			instrumentForOpenTelemetry $MY_IP "$2"

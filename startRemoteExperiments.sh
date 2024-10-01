@@ -74,7 +74,7 @@ function runOneExperiment {
 
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 	
-	if [[ "$PARAMETER" == "TCP" ]]
+	if [[ "$PARAMETER" == "KIEKER_ASPECTJ_TCP" || "$PARAMETER" == "KIEKER_BYTEBUDDY_TCP" ]]
 	then
 		echo "Stopping receiver"
 		# Don't fail on the next one, it usually works and still gives return code 255
@@ -130,11 +130,15 @@ do
 		runOneExperiment "NO_INSTRUMENTATION" no_instrumentation_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "DEACTIVATED" deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "NOLOGGING" nologging_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		
 		runOneExperiment "KIEKER_ASPECTJ_TEXT" kieker_aspectj_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_ASPECTJ_BINARY" kieker_aspectj_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
-		runOneExperiment "KIEKER_ASPECTJ_TCP" tcp_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_ASPECTJ_TCP" kieker_aspectj_tcp_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		
 		runOneExperiment "KIEKER_BYTEBUDDY_TEXT" kieker_bytebuddy_text_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "KIEKER_BYTEBUDDY_BINARY" kieker_bytebuddy_binary_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		runOneExperiment "KIEKER_BYTEBUDDY_TCP" kieker_bytebuddy_tcp_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
+		
 		runOneExperiment "OPENTELEMETRY_DEACTIVATED" otel_deactivated_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "OPENTELEMETRY_ZIPKIN_MEMORY" otel_memory_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
 		runOneExperiment "OPENTELEMETRY_ZIPKIN_ELASTIC" otel_elastic_$NUMUSER"_"$iteration.csv $NUMUSER ${@:2}
