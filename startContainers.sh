@@ -52,7 +52,7 @@ then
 			# nohup is necessary on Rocky Linux, otherwise, the process gets finished after script end; with Ubuntu, it works without
 			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
 	
-			useTCPWriterKieker
+			useTCPWriterKieker $MY_IP
 			;;
 		"KIEKER_BYTEBUDDY_TEXT")
 			instrumentForKiekerBytebuddy
@@ -66,7 +66,7 @@ then
 			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
 	
 			instrumentForKiekerBytebuddy
-			useTCPWriterKieker
+			useTCPWriterKieker $MY_IP
 			;;
 		"OPENTELEMETRY_DEACTIVATED")
 			removeAllInstrumentation
