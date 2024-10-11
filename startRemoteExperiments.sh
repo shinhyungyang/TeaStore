@@ -32,7 +32,7 @@ function runLoadTest {
 	       -l $RESULTFILE
 
 	(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f vmstat)') || true
-	rsync -avz $TEASTORE_RUNNER_IP "vmstat_*" .
+	rsync -avz $TEASTORE_RUNNER_IP "TeaStore/vmstat_*" .
 
 	echo
 	echo
