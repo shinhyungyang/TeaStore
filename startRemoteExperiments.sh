@@ -33,6 +33,7 @@ function runLoadTest {
 
 	(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f vmstat)') || true
 	rsync -avz $TEASTORE_RUNNER_IP:"TeaStore/vmstat_*" .
+	ssh $TEASTORE_RUNNER_IP 'rm TeaStore/vmstat_*'
 
 	echo
 	echo
