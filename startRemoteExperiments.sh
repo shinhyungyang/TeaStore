@@ -7,6 +7,7 @@ function getSum {
 function runLoadTest {
 	RESULTFILE=$1
 	NUMUSER=$2
+	RESULTFILE_CPU=$3
 	echo
 	echo
 	echo "Building is finished; Starting load test"
@@ -24,9 +25,13 @@ function runLoadTest {
 	echo "Replacing host name by $TEASTORE_RUNNER_IP"
 	sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
 
+	ssh lpc4 'nohup vmstat 1 &> '$RESULTFILE_CPU' & disown'
+
 	java -jar $JMETER_HOME/bin/ApacheJMeter.jar \
 	       -t examples/jmeter/teastore_browse_nogui.jmx -n \
 	       -l $RESULTFILE
+
+	(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f vmstat)') || true
 
 	echo
 	echo
@@ -70,7 +75,7 @@ function runOneExperiment {
 	done
 	
 
-	runLoadTest $RESULTFILE $NUMUSER
+	runLoadTest $RESULTFILE $NUMUSER "vmstat_"$RESULTFILE
 
 	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
 	
