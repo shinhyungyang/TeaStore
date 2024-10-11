@@ -25,13 +25,14 @@ function runLoadTest {
 	echo "Replacing host name by $TEASTORE_RUNNER_IP"
 	sed -i '/>hostname/{n;s/.*/\            <stringProp name="Argument.value"\>'$TEASTORE_RUNNER_IP'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
 
-	ssh lpc4 'nohup vmstat 1 &> '$RESULTFILE_CPU' & disown'
+	ssh lpc4 'nohup vmstat 1 &> TeaStore/'$RESULTFILE_CPU' & disown'
 
 	java -jar $JMETER_HOME/bin/ApacheJMeter.jar \
 	       -t examples/jmeter/teastore_browse_nogui.jmx -n \
 	       -l $RESULTFILE
 
 	(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f vmstat)') || true
+	rsync -avz $TEASTORE_RUNNER_IP "vmstat_*" .
 
 	echo
 	echo
@@ -73,7 +74,6 @@ function runOneExperiment {
 		ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/executionControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
 		((index++))
 	done
-	
 
 	runLoadTest $RESULTFILE $NUMUSER "vmstat_"$RESULTFILE
 
