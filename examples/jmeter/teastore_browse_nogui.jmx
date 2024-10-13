@@ -44,7 +44,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -80,7 +80,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -116,15 +116,15 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
+        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager">
           <collectionProp name="CookieManager.cookies"/>
           <boolProp name="CookieManager.clearEachIteration">true</boolProp>
           <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
         </CookieManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Home">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">tools.descartes.teastore.webui/</stringProp>
@@ -137,7 +137,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get Category" enabled="true">
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get Category">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">category</stringProp>
             <stringProp name="RegexExtractor.regex">category=([0-9]*)</stringProp>
@@ -149,8 +149,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/loginAction</stringProp>
@@ -179,8 +179,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="List Products">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/category?category=${category}&amp;page=1</stringProp>
@@ -215,8 +215,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Look at Product">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/product?id=${product_id}</stringProp>
@@ -230,8 +230,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Add Product to Cart">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/cartAction</stringProp>
@@ -260,8 +260,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="List Products with different page">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/category?category=${category}&amp;page=${page_id}</stringProp>
@@ -284,7 +284,7 @@
             <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
           </RegexExtractor>
           <hashTree/>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get page_id" enabled="true">
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get page_id">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">page_id</stringProp>
             <stringProp name="RegexExtractor.regex">page=([0-9]*)&quot;&gt;[0-9]*&lt;</stringProp>
@@ -296,8 +296,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Add Product 2 to Cart">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/cartAction</stringProp>
@@ -326,8 +326,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Logout">
-          <intProp name="HTTPSampler.connect_timeout">5000</intProp>
-          <intProp name="HTTPSampler.response_timeout">5000</intProp>
+          <intProp name="HTTPSampler.connect_timeout">3000</intProp>
+          <intProp name="HTTPSampler.response_timeout">3000</intProp>
           <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.path">/tools.descartes.teastore.webui/loginAction</stringProp>
