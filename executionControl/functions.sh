@@ -150,11 +150,6 @@ function instrumentForOpenTelemetry {
 		echo "otel.instrumentation.methods.include=$OTEL_INCLUDES">> utilities/tools.descartes.teastore.dockerbase/otel-config.properties
 		echo "otel.javaagent.logging=true" >> utilities/tools.descartes.teastore.dockerbase/otel-config.properties
 		echo "otel.javaagent.debug=true" >> utilities/tools.descartes.teastore.dockerbase/otel-config.properties
-			
-		docker run -d -p 9411:9411 \
-			--name zipkin \
-			-e JAVA_OPTS="-Xms1g -Xmx4g" \
-			openzipkin/zipkin
 		;;
 		"OPENTELEMETRY_ZIPKIN_ELASTIC")
 		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.javaagent.configuration-file=\/opentelemetry\/agent\/otel-config.properties -Dotel.resource.attributes=service.name=$(hostname)|g' utilities/tools.descartes.teastore.dockerbase/start.sh
@@ -165,19 +160,6 @@ function instrumentForOpenTelemetry {
 		echo "otel.instrumentation.methods.include=$OTEL_INCLUDES">> utilities/tools.descartes.teastore.dockerbase/otel-config.properties
 		echo "otel.javaagent.logging=true" >> utilities/tools.descartes.teastore.dockerbase/otel-config.properties
 		echo "otel.javaagent.debug=true" >> utilities/tools.descartes.teastore.dockerbase/otel-config.properties
-	
-		docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
-		
-		docker run -d -p 9411:9411 \
-			--name zipkin \
-			-e JAVA_OPTS="-Xms1g -Xmx2g" \
-			-e STORAGE_TYPE=elasticsearch \
-			-e ES_HOSTS=$MY_IP:9200 \
-			-e ES_HTTP_LOGGING=BODY \
-			openzipkin/zipkin
-
-		# Elasticsearch zipkin works basically, but to get the dependencies, it is necessary to run the following:
-		#docker run --env STORAGE_TYPE=elasticsearch --env ES_HOSTS=$MY_IP:9200 --env ES_NODES_WAN_ONLY=true openzipkin/zipkin-dependencies
 		;;
 		"OPENTELEMETRY_DEACTIVATED")
 		sed -i 's|-javaagent:/kieker/agent/agent.jar|-javaagent:/opentelemetry/agent/agent.jar -Dotel.metrics.exporter=none -Dotel.traces.exporter=none|g' utilities/tools.descartes.teastore.dockerbase/start.sh
@@ -185,6 +167,26 @@ function instrumentForOpenTelemetry {
 		;;
 		*) echo "Configuration $TYPE not found; Exiting"; exit 1;;
 	esac
+}
+
+function startZipkinMemory {
+	docker run -d -p 9411:9411 \
+		--name zipkin \
+		-e JAVA_OPTS="-Xms1g -Xmx4g" \
+		openzipkin/zipkin
+}
+
+function startZipkinElastic {
+	docker run -d --name elasticsearch -p 9200:9200 -e discovery.type=single-node elasticsearch:7.10.1
+	docker run -d -p 9411:9411 \
+		--name zipkin \
+		-e JAVA_OPTS="-Xms1g -Xmx2g" \
+		-e STORAGE_TYPE=elasticsearch \
+		-e ES_HOSTS=$MY_IP:9200 \
+		-e ES_HTTP_LOGGING=BODY \
+		openzipkin/zipkin
+	# Elasticsearch zipkin works basically, but to get the dependencies, it is necessary to run the following:
+	#docker run --env STORAGE_TYPE=elasticsearch --env ES_HOSTS=$MY_IP:9200 --env ES_NODES_WAN_ONLY=true openzipkin/zipkin-dependencies
 }
 
 function downloadBytebuddyAgent {

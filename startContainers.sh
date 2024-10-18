@@ -83,6 +83,17 @@ then
 		*) echo "Configuration $2 not found; Exiting"; exit 1;;
 esac
 fi
+if [ $container_id == "1" ]
+then
+	case "$2" in
+		"OPENTELEMETRY_ZIPKIN_MEMORY")
+			startZipkinMemory
+			;;
+		"OPENTELEMETRY_ZIPKIN_ELASTIC")
+			startZipkinElastic
+			;;
+	esac
+fi
 
 echo "Building current version..."
 
@@ -122,6 +133,7 @@ docker run --hostname=teastore-image-$container_id \
 	-v $MY_FOLDER/teastore-image:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=4444" -p 4444:8080 -d teastore-image
 docker run --hostname=teastore-webui-$container_id \
 	-v $MY_FOLDER/teastore-webui:/kieker/logs/ -e "LOG_TO_FILE=true" -e "REGISTRY_HOST=$MY_IP" -e "REGISTRY_PORT=10000" -e "HOST_NAME=$MY_IP" -e "SERVICE_PORT=8080" -p 8080:8080 -d teastore-webui
+	
 else
 	AGENT_IP=$3
 	docker run --hostname=teastore-persistence-$container_id \
