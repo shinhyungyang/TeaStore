@@ -36,7 +36,8 @@
   <Service name="Catalina">
 
     <Connector port="8080" protocol="HTTP/1.1"
-    			server="TeaStoreTomcat"
+		    server="TeaStoreTomcat"
+	       maxThreads="50"
                connectionTimeout="20000"
                redirectPort="8443" />
 
