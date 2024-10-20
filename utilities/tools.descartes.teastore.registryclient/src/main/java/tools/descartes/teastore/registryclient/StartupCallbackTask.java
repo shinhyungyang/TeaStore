@@ -13,7 +13,7 @@ import com.netflix.loadbalancer.Server;
  *
  */
 public class StartupCallbackTask implements Runnable {
-	private static final Logger LOG = LoggerFactory.getLogger(RegistryClient.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StartupCallbackTask.class);
 	
 	private Service requestedService;
 	private StartupCallback callback;
