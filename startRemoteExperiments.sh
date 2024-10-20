@@ -27,7 +27,7 @@ function runLoadTest {
 
 	JMETER_LOOPS=$(echo "10000/sqrt($NUMUSER)" | bc)
 	echo "Replacing loops by $JMETER_LOOPS"
-	sed -i '/LoopController.loops{n;s/.*/\            <stringProp name=\"LoopController.loops\">'$JMETER_LOOPS'\<\/stringProp\>/}' examples/jmeter/teastore_browse_nogui.jmx
+	sed -i '/LoopController.loops/s/.*/\            <stringProp name="LoopController.loops">'$JMETER_LOOPS'<\/stringProp>/' examples/jmeter/teastore_browse_nogui.jmx
 
 	ssh $TEASTORE_RUNNER_IP 'nohup vmstat 1 &> TeaStore/'$RESULTFILE_CPU' & disown'
 
