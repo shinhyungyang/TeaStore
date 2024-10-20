@@ -66,7 +66,7 @@ function resetInstrumentationFiles {
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
 
 	git checkout -- utilities/tools.descartes.teastore.registryclient/src/main/java/tools/descartes/teastore/registryclient/rest/*
-	for file in $(find . -name "pom.xml"); do git checkout -- $file; done
+	for file in $(find . -name "pom.xml" | grep -v "bin\|target"); do git checkout -- $file; done
 }
 
 function removeAllInstrumentation {
