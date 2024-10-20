@@ -60,7 +60,7 @@ function waitForFullstartup {
 
 function resetInstrumentationFiles {
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
-	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.0-aspectj.jar
+	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.2-SNAPSHOT-aspectj.jar
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/start.sh
 
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker.monitoring.properties
