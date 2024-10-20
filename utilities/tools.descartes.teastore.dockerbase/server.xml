@@ -37,8 +37,8 @@
 
     <Connector port="8080" protocol="HTTP/1.1"
 		    server="TeaStoreTomcat"
-	       maxThreads="50"
-               connectionTimeout="20000"
+	       maxThreads="25"
+               connectionTimeout="10000"
                redirectPort="8443" />
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
