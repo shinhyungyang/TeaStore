@@ -45,7 +45,7 @@ function runOneExperiment {
 	RESULTFILE=$2
 	NUMUSER=$3
 	
-	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
+	ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender\|kieker-receiver" | awk "{print \$1}" | xargs docker rm -f \$1'
 	ssh $TEASTORE_RUNNER_IP 'docker images -a | grep none | awk "{print \$3}" | xargs --no-run-if-empty docker rmi $1'
 	ssh $TEASTORE_RUNNER_IP 'echo y | docker system prune --volumes'
 	
@@ -68,7 +68,7 @@ function runOneExperiment {
 	index=2
 	for AGENT_IP in "${@:4}"
 	do
-		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender" | awk "{print \$1}" | xargs docker rm -f \$1'
+		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender\|kieker-receiver" | awk "{print \$1}" | xargs docker rm -f \$1'
 		ssh $AGENT_IP 'docker images -a | grep none | awk "{print \$3}" | xargs --no-run-if-empty docker rmi $1'
 		ssh $AGENT_IP 'echo y | docker volume prune'
 		ssh -t $AGENT_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER $index $AGENT_IP"
@@ -83,8 +83,11 @@ function runOneExperiment {
 	if [[ "$PARAMETER" == "KIEKER_ASPECTJ_TCP" || "$PARAMETER" == "KIEKER_BYTEBUDDY_TCP" ]]
 	then
 		echo "Stopping receiver"
+		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender\|kieker-receiver" | awk "{print \$1}" | xargs docker rm -f \$1'
+		
+		# Old variant, with Kieker-receiver as process on the host - usually creates problems with ports and docker, so don't use for now
 		# Don't fail on the next one, it usually works and still gives return code 255
-		(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)') || true
+		#(ssh -t $TEASTORE_RUNNER_IP 'kill -9 $(pgrep -f receiver.jar)') || true
 	fi
 	
 	sleep 5s

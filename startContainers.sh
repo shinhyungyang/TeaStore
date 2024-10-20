@@ -50,7 +50,7 @@ then
 			;;
 		"KIEKER_ASPECTJ_TCP")
 			# nohup is necessary on Rocky Linux, otherwise, the process gets finished after script end; with Ubuntu, it works without
-			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
+			docker run -d -p 10001:10001 --name kieker-receiver-1 -v $(pwd)/utilities/receiver.jar:/app/receiver.jar eclipse-temurin:latest java -jar /app/receiver.jar 10001 
 	
 			useTCPWriterKieker $MY_IP
 			;;
@@ -63,7 +63,7 @@ then
 			;;
 		"KIEKER_BYTEBUDDY_TCP")
 			# nohup is necessary on Rocky Linux, otherwise, the process gets finished after script end; with Ubuntu, it works without
-			nohup java -jar utilities/receiver.jar 10001 &> "kieker-receiver.log" &
+			docker run -d -p 10001:10001 --name kieker-receiver-1 -v $(pwd)/utilities/receiver.jar:/app/receiver.jar eclipse-temurin:latest java -jar /app/receiver.jar 10001 
 	
 			instrumentForKiekerBytebuddy
 			useTCPWriterKieker $MY_IP
