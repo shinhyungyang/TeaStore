@@ -105,7 +105,8 @@ if [ $maven_exit_status -eq 1 ]; then
     exit 1
 fi
 
-cd tools && ./build_docker.sh >> ../build.txt && cd ..
+echo "Building docker containers..."
+cd tools && ./build_docker.sh &> ../build_docker.txt && cd ..
 
 if [ -d $MY_FOLDER ] && [ ! -z "$( ls -A $MY_FOLDER )" ]
 then
