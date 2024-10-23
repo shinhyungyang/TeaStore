@@ -87,7 +87,7 @@ function runOneExperiment {
 	if [[ "$PARAMETER" == "KIEKER_ASPECTJ_TCP" || "$PARAMETER" == "KIEKER_BYTEBUDDY_TCP" ]]
 	then
 		echo "Stopping receiver"
-		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender\|kieker-receiver" | awk "{print \$1}" | xargs docker rm -f \$1'
+		ssh $TEASTORE_RUNNER_IP 'docker ps -a | grep "teastore\|recommender\|kieker-receiver" | awk "{print \$1}" | xargs docker rm -f \$1'
 		
 		# Old variant, with Kieker-receiver as process on the host - usually creates problems with ports and docker, so don't use for now
 		# Don't fail on the next one, it usually works and still gives return code 255
