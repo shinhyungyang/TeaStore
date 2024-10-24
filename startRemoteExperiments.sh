@@ -74,7 +74,11 @@ function runOneExperiment {
 	do
 		ssh $AGENT_IP 'docker ps -a | grep "teastore\|recommender\|kieker-receiver" | awk "{print \$1}" | xargs docker rm -f \$1'
 		ssh $AGENT_IP 'docker images -a | grep none | awk "{print \$3}" | xargs --no-run-if-empty docker rmi $1'
-		ssh $AGENT_IP 'echo y | docker volume prune'
+		ssh $AGENT_IP 'echo y | docker system prune --volumes'
+		
+		# Remove Zipkin, otel and elastic after the system has been pruned - we don't need to fetch the images everytime freshly
+		ssh $AGENT_IP 'docker ps -a | grep "zipkin\|otel\|elastic" | awk "{print \$1}" | xargs docker rm -f \$1'
+		
 		ssh -t $AGENT_IP "cd TeaStore; ./startContainers.sh $TEASTORE_RUNNER_IP $PARAMETER $index $AGENT_IP"
 		ssh -t $TEASTORE_RUNNER_IP "cd TeaStore/executionControl; ./waitForStartup.sh $TEASTORE_RUNNER_IP"
 		((index++))
