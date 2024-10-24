@@ -112,7 +112,7 @@ function removeAllInstrumentation {
                 mv temp.xml $pomFile
        done
        
-       sed -i '/^COPY kieker-2.0.0-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+       sed -i '/^COPY kieker-/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        sed -i '/^COPY kieker\.monitoring\.properties/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
        rm utilities/tools.descartes.teastore.dockerbase/kieker-*
