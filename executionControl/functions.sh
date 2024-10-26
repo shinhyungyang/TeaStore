@@ -58,6 +58,12 @@ function waitForFullstartup {
 	return 0
 }
 
+function removeKiekerFromDockerfile {
+	sed -i '/^COPY kieker-/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i '/^COPY kieker\.monitoring\.properties/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+}
+
 function resetInstrumentationFiles {
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/kieker-2.0.2-SNAPSHOT-aspectj.jar
@@ -112,9 +118,7 @@ function removeAllInstrumentation {
                 mv temp.xml $pomFile
        done
        
-       sed -i '/^COPY kieker-/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
-       sed -i '/^COPY kieker\.monitoring\.properties/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
-       sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+       removeKiekerFromDockerfile
        rm utilities/tools.descartes.teastore.dockerbase/kieker-*
        cp no-instrumentation-sources/* utilities/tools.descartes.teastore.registryclient/src/main/java/tools/descartes/teastore/registryclient/rest/
 }
@@ -130,9 +134,7 @@ function instrumentForOpenTelemetry {
 	fi
 	
 	git checkout -- utilities/tools.descartes.teastore.dockerbase/Dockerfile
-	sed -i '/^COPY kieker-2.0.0-aspectj\.jar/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
-	sed -i '/^COPY kieker\.monitoring\.properties/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
-	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	removeKiekerFromDockerfile
 	
 	sed -i '/^EXPOSE 8080/i COPY opentelemetry-javaagent.jar \/opentelemetry\/agent\/agent.jar' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	sed -i '/^EXPOSE 8080/i COPY otel-config.properties \/opentelemetry\/agent\/otel-config.properties' utilities/tools.descartes.teastore.dockerbase/Dockerfile
@@ -208,7 +210,7 @@ function instrumentForKiekerBytebuddy {
 		mv kieker-bytebuddy-agent.jar utilities/tools.descartes.teastore.dockerbase/kieker-bytebuddy-agent.jar
 	fi
 
-	sed -i 's/kieker-2.0.0-aspectj/kieker-bytebuddy-agent/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
+	sed -i 's/kieker-2.0.2-SNAPSHOT-aspectj/kieker-bytebuddy-agent/g' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	sed -i '/^COPY aop\.xml/d' utilities/tools.descartes.teastore.dockerbase/Dockerfile
 	
 	echo 'echo "export KIEKER_SIGNATURES_INCLUDE=\"tools.descartes.teastore.*\"" >> /usr/local/tomcat/bin/setenv.sh' >> utilities/tools.descartes.teastore.dockerbase/start.sh
