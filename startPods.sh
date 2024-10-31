@@ -89,7 +89,7 @@ fi
 echo "Building current version..."
 
 # sudo mvn clean install -DskipTests -e
-sudo ./mvnw clean package -DskipTests &> build.txt
+./mvnw clean package -DskipTests &> build.txt
 
 maven_exit_status=$?
 if [ $maven_exit_status -eq 1 ]; then

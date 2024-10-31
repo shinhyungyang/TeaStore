@@ -4,15 +4,15 @@ source executionControl/functions.sh
 
 echo "Checking Kubernetes cluster status..."
 
-if ! minikube status | grep -q "host: Running"; then
-  echo "Starting Minikube"
-  minikube start
-else 
-  echo "Minikube already running"
+if kubectl get --raw='/readyz?verbose' |tail -1 |grep -q "readyz check passed"
+then
+  printf "%s\n" "Kubernetes cluster is available"
+else
+  printf "%s\n" "Kubernetes cluster is not available" >&2
 fi
 
-cd examples/live-demo/images && ./load_minikube.sh
-cd ../kubernetes
+#cd examples/live-demo/images && ./load_minikube.sh
+cd examples/live-demo/kubernetes
 
 if [ "$1" ]
 then
@@ -23,7 +23,7 @@ then
       waitForPodStartup $microservice_id 'DEBUG RecordReceiverMain -- Running transformer'
       ;;
     "traceanalysis")
-      kubectl create -f teastore-rabbitmq_v16.yaml
+      kubectl create -f teastore-rabbitmq.yaml
       microservice_id=$(kubectl get pods | grep "rabbitmq" | awk '{print $1}')
       waitForPodStartup $microservice_id 'Time to start RabbitMQ:'
 
