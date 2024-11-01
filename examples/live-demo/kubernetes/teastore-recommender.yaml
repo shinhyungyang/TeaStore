@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teastore-recommender
+  labels:
+    app: teastore
+    run: teastore-recommender
 spec:
   selector:
       matchLabels:
@@ -15,8 +18,8 @@ spec:
     spec:
       containers:
       - name: teastore-recommender
-        image: teastore-recommender:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-recommender:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:

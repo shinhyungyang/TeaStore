@@ -1,8 +1,10 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teastore-persistence
+  labels:
+    app: teastore
+    run: teastore-persistence
 spec:
   selector:
       matchLabels:
@@ -16,8 +18,8 @@ spec:
     spec:
       containers:
       - name: teastore-persistence
-        image: teastore-persistence:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-persistence:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:

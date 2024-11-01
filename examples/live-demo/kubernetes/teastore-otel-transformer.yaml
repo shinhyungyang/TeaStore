@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teastore-otel-transformer
+  labels:
+    app: teastore
+    run: teastore-otel-transformer
 spec:
   selector:
     matchLabels:
@@ -15,8 +18,8 @@ spec:
     spec:
       containers:
       - name: teastore-otel-transformer
-        image: teastore-otel-transformer:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-otel-transformer:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 10001
 ---

@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teastore-registry
+  labels:
+    app: teastore
+    run: teastore-registry
 spec:
   selector:
       matchLabels:
@@ -15,8 +18,8 @@ spec:
     spec:
       containers:
       - name: teastore-registry
-        image: teastore-registry:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-registry:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:

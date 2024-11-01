@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: teastore-db
+  labels:
+    app: teastore
+    run: teastore-db
 spec:
   selector:
       matchLabels:
@@ -15,8 +18,8 @@ spec:
     spec:
       containers:
       - name: teastore-db
-        image: teastore-db:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-db:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3306
         env:
@@ -52,8 +55,8 @@ spec:
     spec:
       containers:
       - name: teastore-registry
-        image: teastore-registry:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-registry:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
@@ -91,8 +94,8 @@ spec:
     spec:
       containers:
       - name: teastore-persistence
-        image: teastore-persistence:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-persistence:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
@@ -124,8 +127,8 @@ spec:
     spec:
       containers:
       - name: teastore-auth
-        image: teastore-auth:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-auth:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
@@ -161,8 +164,8 @@ spec:
     spec:
       containers:
       - name: teastore-image
-        image: teastore-image:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-image:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
@@ -198,8 +201,8 @@ spec:
     spec:
       containers:
       - name: teastore-recommender
-        image: teastore-recommender:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-recommender:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
@@ -235,8 +238,8 @@ spec:
     spec:
       containers:
       - name: teastore-webui
-        image: teastore-webui:latest
-        imagePullPolicy: Never
+        image: shinhyungyang/teastore-webui:livedemo-k3s
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
