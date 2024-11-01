@@ -19,7 +19,7 @@ spec:
       containers:
       - name: teastore-kieker-rabbitmq
         image: shinhyungyang/teastore-kieker-rabbitmq:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 5672
         - containerPort: 8080

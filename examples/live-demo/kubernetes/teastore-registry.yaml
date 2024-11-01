@@ -19,7 +19,7 @@ spec:
       containers:
       - name: teastore-registry
         image: shinhyungyang/teastore-registry:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

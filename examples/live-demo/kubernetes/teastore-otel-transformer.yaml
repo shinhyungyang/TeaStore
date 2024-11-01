@@ -19,7 +19,7 @@ spec:
       containers:
       - name: teastore-otel-transformer
         image: shinhyungyang/teastore-otel-transformer:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 10001
 ---

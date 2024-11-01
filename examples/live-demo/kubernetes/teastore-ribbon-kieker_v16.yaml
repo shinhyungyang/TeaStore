@@ -19,7 +19,7 @@ spec:
       containers:
       - name: teastore-db
         image: shinhyungyang/teastore-db:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 3306
         env:
@@ -56,7 +56,7 @@ spec:
       containers:
       - name: teastore-registry
         image: shinhyungyang/teastore-registry:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -95,7 +95,7 @@ spec:
       containers:
       - name: teastore-persistence
         image: shinhyungyang/teastore-persistence:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -128,7 +128,7 @@ spec:
       containers:
       - name: teastore-auth
         image: shinhyungyang/teastore-auth:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -165,7 +165,7 @@ spec:
       containers:
       - name: teastore-image
         image: shinhyungyang/teastore-image:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -202,7 +202,7 @@ spec:
       containers:
       - name: teastore-recommender
         image: shinhyungyang/teastore-recommender:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -239,7 +239,7 @@ spec:
       containers:
       - name: teastore-webui
         image: shinhyungyang/teastore-webui:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

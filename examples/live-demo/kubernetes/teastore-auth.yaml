@@ -19,7 +19,7 @@ spec:
       containers:
       - name: teastore-auth
         image: shinhyungyang/teastore-auth:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

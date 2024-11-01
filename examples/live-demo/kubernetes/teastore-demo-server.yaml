@@ -19,7 +19,7 @@ spec:
       containers:
       - name: teastore-demo-server
         image: shinhyungyang/teastore-demo-server:livedemo-k3s
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         - containerPort: 3001

@@ -4,6 +4,7 @@ cd ..
 
 echo "Deleting Previously stored graph..."
 rm -rf kieker.log out/*
+mkdir out
 
 echo "Creating Graph via Kieker Trace Analysis..."
 trace-analysis/bin/trace-analysis \
