@@ -7,6 +7,7 @@
 		<exclude within="tools.descartes.teastore.rest..*" />
 		<exclude within="tools.descartes.teastore.registryclient.loadbalancers..*" />
 		<exclude within="tools.descartes.teastore.registryclient.RegistryClient" />
+		<exclude within="tools.descartes.teastore.registryclient.RegistryClient$1" />
 		<exclude within="tools.descartes.teastore.auth.startup.AuthStartup" />
 		<exclude within="tools.descartes.teastore.registryclient.StartupCallbackTask" />
 		<exclude within="tools.descartes.teastore.registryclient.RegistryClientHeartbeatDaemon" />
