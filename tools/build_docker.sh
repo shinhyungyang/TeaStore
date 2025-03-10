@@ -1,7 +1,7 @@
 #!/bin/bash
 push_flag='true'
 registry='kieker/'     # e.g. 'descartesresearch/'
-tag=':kieker-2.0.2'
+tag=':kieker-2.0.2-dind'
 
 print_usage() {
   printf "Usage: docker_build.sh [-p] [-r REGISTRY_NAME]\n"
